@@ -3,7 +3,7 @@
 #include "ew/engine.h"
 #include "GLFW/glfw3.h"
 #include "glfwcontext.h"
-#include "rectblockcollidableblock.h"
+#include "ew/rectblockcollidableblock.h"
 
 #include <iostream>
 
@@ -27,6 +27,9 @@ Player::~Player()
 
 void Player::update(const float delta)
 {
+  if(!alive)
+    return;
+
   if(colliding)
     glhckMaterialDiffuseb(glhckObjectGetMaterial(o), 255, 0, 0, 255);
   else
@@ -37,7 +40,7 @@ void Player::update(const float delta)
   vx = 0;
   vy = min(vy + delta * 3000, 500);
 
-  if(glfwGetKey(ctx->window, GLFW_KEY_UP) == GLFW_PRESS)
+  if(glfwGetKey(ctx->window, GLFW_KEY_UP) == GLFW_PRESS && onGround)
   {
     vy = -500;
   }
@@ -53,15 +56,18 @@ void Player::update(const float delta)
   x += vx * delta;
   y += vy * delta;
   colliding = false;
+  onGround = false;
 }
 
 void Player::render()
 {
+  if(!alive)
+    return;
   glhckObjectPositionf(o, x + w/2, y + h/2, 0);
   glhckObjectDraw(o);
 }
 
-RectCollidable::RectCollisionInformation Player::getRectCollisionInformation()
+ew::RectCollidable::RectCollisionInformation Player::getRectCollisionInformation()
 {
   return {x, y, w, h, vx, vy};
 }
@@ -81,11 +87,28 @@ void Player::handleRectCollision(RectCollidable *)
 
 void Player::squishRectBlockCollision()
 {
-  std::cout << "SQUISH!" << std::endl;
+  alive = false;
 }
 
-bool Player::verticalRectBlockCollision(RectBlockCollidableBlock &block, const float delta)
+bool Player::verticalRectBlockCollision(ew::RectBlockCollidableBlock &block, const float delta)
 {
-  x += block.getRectCollisionInformation().vx * delta;
+  RectCollisionInformation b =  block.getRectCollisionInformation();
+  if(b.y > y)
+    onGround = true;
+  x += b.vx * delta;
   return RectBlockCollidableActor::verticalRectBlockCollision(block, delta);
+}
+
+bool Player::getAlive() const
+{
+  return alive;
+}
+
+void Player::respawn(float sx, float sy)
+{
+  alive = true;
+  x = sx;
+  y = sy;
+  vx = 0;
+  vy = 0;
 }

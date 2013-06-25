@@ -5,11 +5,11 @@
 
 #include "ew/updatable.h"
 #include "ew/renderable.h"
-#include "rectblockcollidableactor.h"
+#include "ew/rectblockcollidableactor.h"
 #include "ew/state.h"
 #include "ew/rolemanager.h"
 
-class Player : public ew::Updatable, public ew::Renderable, public RectBlockCollidableActor
+class Player : public ew::Updatable, public ew::Renderable, public ew::RectBlockCollidableActor
 {
 public:
   Player(float x, float y, float w, float h, ew::State* state);
@@ -23,7 +23,10 @@ public:
   void handleRectCollision(RectCollidable *) override;
 
   void squishRectBlockCollision() override;
-  bool verticalRectBlockCollision(RectBlockCollidableBlock &block, float const delta) override;
+  bool verticalRectBlockCollision(ew::RectBlockCollidableBlock &block, float const delta) override;
+
+  bool getAlive() const;
+  void respawn(float sx, float sy);
 
 private:
   glhckObject* o;
@@ -34,6 +37,8 @@ private:
   float vx;
   float vy;
   bool colliding = false;
+  bool onGround = false;
+  bool alive = true;
 
   ew::State* state;
   ew::RoleManager<Player, ew::Updatable, ew::Renderable, RectBlockCollidableActor, RectCollidable> roles;

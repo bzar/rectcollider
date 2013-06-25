@@ -5,13 +5,13 @@
 
 #include "ew/renderable.h"
 #include "ew/updatable.h"
-#include "rectblockcollidableblock.h"
+#include "ew/rectblockcollidableblock.h"
 #include "ew/state.h"
 #include "ew/rolemanager.h"
 
 #include <vector>
 
-class Block : public ew::Updatable, public ew::Renderable, public RectBlockCollidableBlock
+class Block : public ew::Updatable, public ew::Renderable, public ew::RectBlockCollidableBlock
 {
 public:
   struct PathNode

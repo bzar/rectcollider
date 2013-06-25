@@ -62,7 +62,7 @@ void Block::render()
   glhckObjectDraw(o);
 }
 
-RectCollidable::RectCollisionInformation Block::getRectCollisionInformation()
+ew::RectCollidable::RectCollisionInformation Block::getRectCollisionInformation()
 {
   return {x, y, w, h, vx, vy};
 }
