@@ -3,13 +3,12 @@
 #include "ew/renderphase.h"
 #include "ew/rectblockcollidephase.h"
 #include "ew/rectcollidephase.h"
-#include "ew/customphase.h"
 
-GameState::GameState() : ew::State(), ew::CustomPhaseHandler(),
+GameState::GameState() : ew::State(),
   player(nullptr), blocks()
 {
   phases = {new ew::UpdatePhase(this), new ew::RectBlockCollidePhase(this), new ew::RectCollidePhase(this),
-            new ew::CustomPhase(this, this), new ew::RenderPhase(this) };
+            new GamePhase(this, this), new ew::RenderPhase(this) };
 
   player = new Player(400, 240, 10, 10, this);
   blocks = {
@@ -34,7 +33,7 @@ GameState::~GameState()
   }
 }
 
-void GameState::executeCustomPhase(const float delta, ew::State *state)
+void GameState::gamePhase(const float delta)
 {
   if(!player->getAlive())
     player->respawn(400, 240);
