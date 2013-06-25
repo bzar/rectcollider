@@ -6,6 +6,7 @@
 
 #include "player.h"
 #include "block.h"
+#include "enemy.h"
 #include <vector>
 
 class GameState : public ew::State
@@ -20,6 +21,7 @@ private:
   typedef ew::CustomPhase<GameState, &GameState::gamePhase> GamePhase;
   Player* player;
   std::vector<Block*> blocks;
+  std::vector<Enemy*> enemies;
 };
 
 #endif // GAMESTATE_H

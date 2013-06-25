@@ -1,4 +1,5 @@
 #include "block.h"
+#include "player.h"
 
 Block::Block(float x, float y, float w, float h, std::vector<PathNode> const& path, ew::State *state) :
   ew::Updatable(), ew::Renderable(), RectBlockCollidableBlock(),
@@ -26,30 +27,7 @@ void Block::update(const float delta)
   else
     glhckMaterialDiffuseb(glhckObjectGetMaterial(o), 128, 128, 128, 255);
 
-  if(path.size() > 1)
-  {
-    t += delta;
-    float pt = t;
-    unsigned int i = 1;
-
-    while(pt > 0)
-    {
-      PathNode const& prev = path.at(i - 1);
-      PathNode const& next = path.at(i);
-      if(pt <= next.t)
-      {
-        float const progress = pt / next.t;
-        vx = (prev.x + (next.x - prev.x) * progress  - x) / delta;
-        vy = (prev.y + (next.y - prev.y) * progress  - y) / delta;
-      }
-      else
-      {
-        i = i % (path.size() - 1) + 1;
-      }
-
-      pt -= next.t;
-    }
-  }
+  followPath(delta);
 
   x += vx * delta;
   y += vy * delta;
@@ -75,8 +53,39 @@ void Block::setRectCollisionInformation(const RectCollidable::RectCollisionInfor
   vy = newRectCollisionInformation.vy;
 }
 
-void Block::handleRectCollision(RectCollidable *)
+void Block::handleRectCollision(RectCollidable * other)
 {
-  colliding = true;
+  if(typeid(*other) == typeid(Player))
+  {
+    colliding = true;
+  }
+}
+
+void Block::followPath(const float delta)
+{
+  if(path.size() > 1)
+  {
+    t += delta;
+    float pt = t;
+    unsigned int i = 1;
+
+    while(pt > 0)
+    {
+      PathNode const& prev = path.at(i - 1);
+      PathNode const& next = path.at(i);
+      if(pt <= next.t)
+      {
+        float const progress = pt / next.t;
+        vx = (prev.x + (next.x - prev.x) * progress  - x) / delta;
+        vy = (prev.y + (next.y - prev.y) * progress  - y) / delta;
+      }
+      else
+      {
+        i = i % (path.size() - 1) + 1;
+      }
+
+      pt -= next.t;
+    }
+  }
 }
 

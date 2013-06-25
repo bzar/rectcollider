@@ -5,7 +5,7 @@
 #include "ew/rectcollidephase.h"
 
 GameState::GameState() : ew::State(),
-  player(nullptr), blocks()
+  player(nullptr), blocks(), enemies()
 {
   phases = {new ew::UpdatePhase(this), new ew::RectBlockCollidePhase(this), new ew::RectCollidePhase(this),
             new GamePhase(this, this), new ew::RenderPhase(this) };
@@ -22,6 +22,10 @@ GameState::GameState() : ew::State(),
     new Block{470, 310, 180, 10, {}, this},
     new Block{10, 70, 50, 10, {{11, 70, 0}, {11, 70, 1}, {11, 480 - 21, 2}, {11, 480 - 21, 1}, {11, 70, 2}}, this},
   };
+
+  enemies = {
+    new Enemy{120, 20, 10, 10, this}
+  };
 }
 
 GameState::~GameState()
@@ -30,6 +34,11 @@ GameState::~GameState()
   for(Block* block : blocks)
   {
     delete block;
+  }
+
+  for(Enemy* enemy : enemies)
+  {
+    delete enemy;
   }
 }
 

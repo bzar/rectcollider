@@ -5,7 +5,8 @@
 #include "glfwcontext.h"
 #include "ew/rectblockcollidableblock.h"
 
-#include <iostream>
+#include "block.h"
+#include "enemy.h"
 
 Player::Player(float x, float y, float w, float h, ew::State* state) :
   ew::Updatable(), ew::Renderable(), RectBlockCollidableActor(),
@@ -80,9 +81,17 @@ void Player::setRectCollisionInformation(const RectCollidable::RectCollisionInfo
   vy = newRectCollisionInformation.vy;
 }
 
-void Player::handleRectCollision(RectCollidable *)
+void Player::handleRectCollision(RectCollidable* other)
 {
-  colliding = true;
+  if(typeid(*other) == typeid(Block))
+  {
+    colliding = true;
+  }
+  else if(typeid(*other) == typeid(Enemy))
+  {
+    alive = false;
+  }
+
 }
 
 void Player::squishRectBlockCollision()

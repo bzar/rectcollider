@@ -29,9 +29,11 @@ public:
 
   RectCollisionInformation getRectCollisionInformation();
   void setRectCollisionInformation(const RectCollisionInformation &newRectCollisionInformation);
-  void handleRectCollision(RectCollidable *);
+  void handleRectCollision(RectCollidable *other);
 
 private:
+  void followPath(float const delta);
+
   glhckObject* o;
   float x;
   float y;
