@@ -24,7 +24,8 @@ GameState::GameState() : ew::State(),
   };
 
   enemies = {
-    new Enemy{120, 20, 10, 10, this}
+    new Enemy{120, 20, 10, 10, -40, this},
+    new Enemy{470, 90, 10, 10, 49, this}
   };
 }
 

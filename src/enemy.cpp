@@ -5,9 +5,9 @@
 
 #include <iostream>
 
-Enemy::Enemy(float x, float y, float w, float h, ew::State* state) :
+Enemy::Enemy(float x, float y, float w, float h, float vx, ew::State* state) :
   ew::Updatable(), ew::Renderable(), RectBlockCollidableActor(),
-  o(nullptr), x(x), y(y), w(w), h(h), vx(-40), vy(0),
+  o(nullptr), x(x), y(y), w(w), h(h), vx(vx), vy(0), xInit(x), yInit(y),
   state(state), roles(this, state)
 {
   o = glhckPlaneNew(w, h);
@@ -53,6 +53,8 @@ void Enemy::setRectCollisionInformation(const RectCollidable::RectCollisionInfor
 
 void Enemy::squishRectBlockCollision()
 {
+  x = xInit;
+  y = yInit;
 }
 
 void Enemy::turnIfNoFloorAhead()

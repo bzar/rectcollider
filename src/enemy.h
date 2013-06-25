@@ -12,7 +12,7 @@
 class Enemy : public ew::Updatable, public ew::Renderable, public ew::RectBlockCollidableActor
 {
 public:
-  Enemy(float x, float y, float w, float h, ew::State* state);
+  Enemy(float x, float y, float w, float h, float vx, ew::State* state);
   ~Enemy();
 
   void update(const float delta) override;
@@ -35,6 +35,9 @@ private:
   float h;
   float vx;
   float vy;
+
+  float xInit;
+  float yInit;
 
   ew::State* state;
   ew::RoleManager<Enemy, ew::Updatable, ew::Renderable, RectBlockCollidableActor, RectCollidable> roles;
