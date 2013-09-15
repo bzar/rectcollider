@@ -8,7 +8,7 @@ Block::Block(float x, float y, float w, float h, std::vector<PathNode> const& pa
 {
   o = glhckPlaneNew(w, h);
   glhckMaterial* mat = glhckMaterialNew(nullptr);
-  glhckMaterialDiffuseb(mat, 128, 128, 128, 255);
+  glhckMaterialDiffuseb(mat, 100, 64, 8, 255);
   glhckObjectMaterial(o, mat);
   glhckMaterialFree(mat);
   glhckObjectPositionf(o, x, y, 0);
@@ -21,12 +21,6 @@ Block::~Block()
 
 void Block::update(const float delta)
 {
-
-  if(colliding)
-    glhckMaterialDiffuseb(glhckObjectGetMaterial(o), 192, 192, 192, 255);
-  else
-    glhckMaterialDiffuseb(glhckObjectGetMaterial(o), 128, 128, 128, 255);
-
   followPath(delta);
 
   x += vx * delta;

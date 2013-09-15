@@ -7,6 +7,7 @@
 
 #include "block.h"
 #include "enemy.h"
+#include "goal.h"
 
 Player::Player(float x, float y, float w, float h, ew::State* state) :
   ew::Updatable(), ew::Renderable(), RectBlockCollidableActor(),
@@ -15,7 +16,7 @@ Player::Player(float x, float y, float w, float h, ew::State* state) :
 {
   o = glhckPlaneNew(w, h);
   glhckMaterial* mat = glhckMaterialNew(nullptr);
-  glhckMaterialDiffuseb(mat, 255, 255, 255, 255);
+  glhckMaterialDiffuseb(mat, 255, 160, 100, 255);
   glhckObjectMaterial(o, mat);
   glhckMaterialFree(mat);
   glhckObjectPositionf(o, x, y, 0);
@@ -31,31 +32,29 @@ void Player::update(const float delta)
   if(!alive)
     return;
 
-  if(colliding)
-    glhckMaterialDiffuseb(glhckObjectGetMaterial(o), 255, 0, 0, 255);
-  else
-    glhckMaterialDiffuseb(glhckObjectGetMaterial(o), 255, 255, 255, 255);
-
   GLFWContext* ctx = state->engine->singletons.get<GLFWContext>();
 
   vx = 0;
-  vy = min(vy + delta * 3000, 500);
+  if(onGround)
+    vy = 0;
+  else
+    vy += 2000 * delta;
 
   if(glfwGetKey(ctx->window, GLFW_KEY_UP) == GLFW_PRESS && onGround)
   {
-    vy = -500;
+    vy = -550;
   }
   if(glfwGetKey(ctx->window, GLFW_KEY_LEFT) == GLFW_PRESS)
   {
-    vx -= 200;
+    vx -= 120;
   }
   if(glfwGetKey(ctx->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
   {
-    vx += 200;
+    vx += 120;
   }
 
   x += vx * delta;
-  y += vy * delta;
+  y += min(250, max(-250, vy)) * delta;
   colliding = false;
   onGround = false;
 }
@@ -91,6 +90,10 @@ void Player::handleRectCollision(RectCollidable* other)
   {
     alive = false;
   }
+  else if(typeid(*other) == typeid(Goal))
+  {
+    setVictorious(true);
+  }
 
 }
 
@@ -120,4 +123,15 @@ void Player::respawn(float sx, float sy)
   y = sy;
   vx = 0;
   vy = 0;
+  victorious = false;
 }
+bool Player::getVictorious() const
+{
+  return victorious;
+}
+
+void Player::setVictorious(bool value)
+{
+  victorious = value;
+}
+

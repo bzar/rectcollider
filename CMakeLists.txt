@@ -17,3 +17,5 @@ list(APPEND CMAKE_CXX_FLAGS -std=c++11)
 add_executable(rectcollider ${SOURCES})
 
 target_link_libraries(rectcollider engineworks qmlon glfw glhck ${GLFW_LIBRARIES})
+
+file(COPY levels DESTINATION .)

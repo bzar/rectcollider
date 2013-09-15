@@ -28,6 +28,9 @@ public:
   bool getAlive() const;
   void respawn(float sx, float sy);
 
+  bool getVictorious() const;
+  void setVictorious(bool value);
+
 private:
   glhckObject* o;
   float x;
@@ -39,6 +42,7 @@ private:
   bool colliding = false;
   bool onGround = false;
   bool alive = true;
+  bool victorious = false;
 
   ew::State* state;
   ew::RoleManager<Player, ew::Updatable, ew::Renderable, RectBlockCollidableActor, RectCollidable> roles;

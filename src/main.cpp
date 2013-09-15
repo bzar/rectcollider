@@ -86,15 +86,19 @@ void gameloop(GLFWwindow* window)
   GlhckGLFWInterceptor glhckGLFWInterceptor;
   engine.addInterceptor(&glhckGLFWInterceptor);
 
-  GameState gameState;
+  GameState gameState({"levels/001.qmlon", "levels/002.qmlon", "levels/003.qmlon", "levels/004.qmlon", "levels/005.qmlon", "levels/006.qmlon", "levels/007.qmlon", "levels/008.qmlon"});
 
   engine.addState(0, &gameState);
   engine.setState(0);
 
   engine.run();
 
+  double t0 = glfwGetTime();
   while(engine.isRunning())
   {
-    engine.advance(1/60.0f);
+    double t = glfwGetTime();
+    double dt = t - t0;
+    t0 = t;
+    engine.advance(dt);
   }
 }
