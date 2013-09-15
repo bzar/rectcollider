@@ -4,3 +4,6 @@
 [submodule "lib/glhck"]
 	path = lib/glhck
 	url = https://github.com/Cloudef/glhck.git
+[submodule "lib/qmlon"]
+	path = lib/qmlon
+	url = https://github.com/bzar/qmlon.git
