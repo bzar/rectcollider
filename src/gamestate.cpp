@@ -6,9 +6,10 @@
 #include "qmloninitializer.h"
 #include "qmloninitializershelpers.h"
 #include "ew/engine.h"
+#include <algorithm>
 
-GameState::GameState(std::list<std::string> const& levelFilenames) : ew::State(),
-  player(nullptr), blocks(), enemies(), levelFilenames(levelFilenames)
+GameState::GameState(std::vector<std::string> const& levelFilenames) : ew::State(),
+  player(nullptr), blocks(), enemies(), levelFilenames(levelFilenames), levelIterator()
 {
   phases = {new ew::UpdatePhase(this), new ew::RectBlockCollidePhase(this), new ew::RectCollidePhase(this),
             new GamePhase(this, this), new ew::RenderPhase(this) };
@@ -16,8 +17,8 @@ GameState::GameState(std::list<std::string> const& levelFilenames) : ew::State()
   player = new Player(400, 240, 10, 10, this);
   goal = new Goal(100, 100, 10, 10, this);
 
-  loadLevel(this->levelFilenames.front());
-  this->levelFilenames.pop_front();
+  levelIterator = levelFilenames.begin();
+
 
   /*blocks = {
     new Block{0, 0, 10, 480, {}, this},
@@ -45,6 +46,7 @@ GameState::~GameState()
 
 void GameState::enter()
 {
+  loadLevel(*levelIterator);
   glhckColorb bgColor = {90, 134, 255, 255};
   glhckRenderClearColor(&bgColor);
 }
@@ -56,16 +58,21 @@ void GameState::gamePhase(const float delta)
 
   if(player->getVictorious())
   {
-    if(levelFilenames.empty())
+    ++levelIterator;
+    if(levelIterator == levelFilenames.end())
     {
       engine->quit();
     }
     else
     {
-      loadLevel(levelFilenames.front());
-      levelFilenames.pop_front();
+      loadLevel(*levelIterator);
     }
   }
+}
+
+void GameState::setLevel(const std::string& filename)
+{
+  levelIterator = std::find(levelFilenames.begin(), levelFilenames.end(), filename);
 }
 
 void GameState::loadLevel(const std::string& filename)

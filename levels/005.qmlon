@@ -1,0 +1,11 @@
+Level {
+  start: { x: 30, y: 240 }
+  goal: { x: 700, y: 270 }
+  
+  Block { x: 0, y: 0, w: 10, h: 480 }
+  Block { x: 790, y: 0, w: 10, h: 480 }
+  Block { x: 10, y: 0, w: 780, h: 160 }
+  Block { x: 10, y: 320, w: 780, h: 160 }
+  
+  Block { x: 280, y: 280, w: 510, h: 20 }
+}

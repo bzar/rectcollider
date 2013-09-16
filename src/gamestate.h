@@ -10,18 +10,18 @@
 #include "enemy.h"
 #include <vector>
 #include <string>
-#include <list>
 
 class GameState : public ew::State
 {
 public:
-  GameState(std::list<std::string> const& levelFilenames);
+  GameState(std::vector<std::string> const& levelFilenames);
   ~GameState();
 
   void enter() override;
 
   void gamePhase(const float delta);
 
+  void setLevel(std::string const& filename);
   void loadLevel(std::string const& filename);
 
 private:
@@ -31,7 +31,8 @@ private:
   Goal* goal;
   std::vector<Block*> blocks;
   std::vector<Enemy*> enemies;
-  std::list<std::string> levelFilenames;
+  std::vector<std::string> levelFilenames;
+  std::vector<std::string>::const_iterator levelIterator;
 };
 
 #endif // GAMESTATE_H

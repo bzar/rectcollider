@@ -4,11 +4,15 @@
 #include "ew/interceptor.h"
 #include "glfwcontext.h"
 
+#include "menustate.h"
+#include "menuitems.h"
+
 #include "gamestate.h"
 #include "player.h"
 #include "block.h"
 
 #include <iostream>
+#include <algorithm>
 
 void windowCloseCallback(GLFWwindow* window);
 void gameloop(GLFWwindow* window);
@@ -86,9 +90,24 @@ void gameloop(GLFWwindow* window)
   GlhckGLFWInterceptor glhckGLFWInterceptor;
   engine.addInterceptor(&glhckGLFWInterceptor);
 
-  GameState gameState({"levels/001.qmlon", "levels/002.qmlon", "levels/003.qmlon", "levels/004.qmlon", "levels/005.qmlon", "levels/006.qmlon", "levels/007.qmlon", "levels/008.qmlon"});
+  std::vector<std::string> levels = {"levels/001.qmlon", "levels/002.qmlon", "levels/003.qmlon", "levels/004.qmlon",
+                                     "levels/005.qmlon", "levels/006.qmlon", "levels/007.qmlon", "levels/008.qmlon"};
+  GameState gameState(levels);
+  MenuState menuState({
+                        new Submenu("Title 1", {
+                                      new Submenu("Title 1-1"),
+                                      new Submenu("Title 1-2"),
+                                      new MenuSelect("Pick one", {"A", "B", "42", "Robert"}, [](std::string const&) {}),
+                                      new BackMenuAction("Back")
+                                    }),
+                        new MenuSelect("Level", levels, [&gameState](std::string const& level) {gameState.setLevel(level);}),
+                        new MenuAction("Start", [](MenuState* s) { s->engine->setState(1);})
+                      });
 
-  engine.addState(0, &gameState);
+
+
+  engine.addState(0, &menuState);
+  engine.addState(1, &gameState);
   engine.setState(0);
 
   engine.run();
