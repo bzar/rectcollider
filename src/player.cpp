@@ -7,6 +7,7 @@
 
 #include "block.h"
 #include "enemy.h"
+#include "enemyblock.h"
 #include "goal.h"
 
 Player::Player(float x, float y, float w, float h, ew::State* state) :
@@ -87,6 +88,10 @@ void Player::handleRectCollision(RectCollidable* other)
     colliding = true;
   }
   else if(typeid(*other) == typeid(Enemy))
+  {
+    alive = false;
+  }
+  else if(typeid(*other) == typeid(EnemyBlock))
   {
     alive = false;
   }

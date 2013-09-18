@@ -7,6 +7,7 @@
 #include "qmloninitializershelpers.h"
 #include "ew/engine.h"
 #include <algorithm>
+#include "enemyblock.h"
 
 GameState::GameState(std::vector<std::string> const& levelFilenames) : ew::State(),
   player(nullptr), blocks(), enemies(), levelFilenames(levelFilenames), levelIterator()
@@ -54,7 +55,7 @@ void GameState::enter()
 void GameState::gamePhase(const float delta)
 {
   if(!player->getAlive())
-    player->respawn(400, 240);
+    player->respawn(startX, startY);
 
   if(player->getVictorious())
   {
@@ -86,9 +87,9 @@ void GameState::loadLevel(const std::string& filename)
   qmlon::Initializer<GameState> gsi({
     {"start", [&](GameState& gameState, qmlon::Value::Reference v) {
        qmlon::Object& o = v->asObject();
-       float x = o.getProperty("x")->asFloat();
-       float y = o.getProperty("y")->asFloat();
-       gameState.player->respawn(x, y);
+       startX = o.getProperty("x")->asFloat();
+       startY = o.getProperty("y")->asFloat();
+       gameState.player->respawn(startX, startY);
     }},
     {"goal", [&](GameState& gameState, qmlon::Value::Reference v) {
        qmlon::Object& o = v->asObject();
@@ -102,7 +103,6 @@ void GameState::loadLevel(const std::string& filename)
        float y = o.getProperty("y")->asFloat();
        float w = o.getProperty("w")->asFloat();
        float h = o.getProperty("h")->asFloat();
-
        std::vector<Block::PathNode> pathNodes;
 
        if(o.hasProperty("path")) {
@@ -115,6 +115,25 @@ void GameState::loadLevel(const std::string& filename)
        }
 
        Block* block = new Block(x, y, w, h, pathNodes, &gameState);
+       gameState.blocks.push_back(block);
+    }},
+    {"EnemyBlock", [&](GameState& gameState, qmlon::Object& o) {
+       float x = o.getProperty("x")->asFloat();
+       float y = o.getProperty("y")->asFloat();
+       float w = o.getProperty("w")->asFloat();
+       float h = o.getProperty("h")->asFloat();
+       std::vector<Block::PathNode> pathNodes;
+
+       if(o.hasProperty("path")) {
+         qmlon::Value::List path = o.getProperty("path")->asList();
+         for(qmlon::Value::Reference& item : path)
+         {
+           Block::PathNode pathNode = qmlon::create(item->asObject(), pni);
+           pathNodes.push_back(pathNode);
+         }
+       }
+
+       EnemyBlock* block = new EnemyBlock(x, y, w, h, pathNodes, &gameState);
        gameState.blocks.push_back(block);
     }},
     {"Enemy", [&](GameState& gameState, qmlon::Object& o) {

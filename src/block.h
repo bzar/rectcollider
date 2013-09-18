@@ -31,7 +31,7 @@ public:
   void setRectCollisionInformation(const RectCollisionInformation &newRectCollisionInformation);
   void handleRectCollision(RectCollidable *other);
 
-private:
+protected:
   void followPath(float const delta);
 
   glhckObject* o;
