@@ -4,6 +4,7 @@
 #include "glhck/glhck.h"
 #include "ew/renderable.h"
 #include "ew/state.h"
+#include "ew/rolemanager.h"
 
 class Tile : public ew::Renderable
 {
@@ -18,6 +19,7 @@ public:
   float getY() const;
   void setY(float value);
 
+  glhckObject* getGlhckObject() const;
 protected:
   glhckObject* o;
   float x;
@@ -26,6 +28,7 @@ protected:
   float h;
   ew::State* state;
 
+  ew::RoleManager<Tile, ew::Renderable> roles;
 };
 
 #endif // TILE_H

@@ -7,7 +7,7 @@ Block::Block(float x, float y, float w, float h, ew::State *state) :
   x(x), y(y), w(w), h(h), vx(0), vy(0),
   t(0), path(), roles(this, state)
 {
-  glhckObjectPositionf(o, x + w/2, y + h/2, 0);
+  glhckObjectPositionf(o, x, y, 0);
 }
 
 Block::~Block()
@@ -20,7 +20,7 @@ void Block::update(const float delta)
 
   x += vx * delta;
   y += vy * delta;
-  glhckObjectPositionf(o, x + w/2, y + h/2, 0);
+  glhckObjectPositionf(o, x, y, 0);
   colliding = false;
 }
 
@@ -80,6 +80,13 @@ bool Block::getBlocking() const
 void Block::setBlocking(bool value)
 {
   blocking = value;
+}
+
+void Block::addChildTile(Tile* tile)
+{
+  glhckObjectAddChild(o, tile->getGlhckObject());
+  tile->setX(tile->getX() - x);
+  tile->setY(tile->getY() - y);
 }
 
 bool Block::getLethal() const

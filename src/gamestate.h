@@ -27,6 +27,7 @@ public:
 
 private:
   void reset();
+
   typedef ew::CustomPhase<GameState, &GameState::gamePhase> GamePhase;
   float startX;
   float startY;

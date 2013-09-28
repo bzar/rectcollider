@@ -5,7 +5,9 @@
 #include "ew/rectcollidephase.h"
 
 #include "Tmx.h"
+
 #include "tileset.h"
+#include "tile.h"
 
 #include "ew/engine.h"
 #include <algorithm>
@@ -111,49 +113,58 @@ void GameState::loadLevel(const std::string& filename)
           int y = tileHeight * ty;
 
           Tileset& tileset = tilesets.at(mapTile.tilesetId);
-          Block* block = new Block(x, y, tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(mapTile.id), this);
-          Tmx::Tile const* tile = map.GetTileset(mapTile.tilesetId)->GetTile(mapTile.id);
+          Tile* tile = new Tile(x, y, tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(mapTile.id), this);
+          /*Tmx::Tile const* tile = map.GetTileset(mapTile.tilesetId)->GetTile(mapTile.id);
 
           if(tile)
           {
             const Tmx::PropertySet& properties = tile->GetProperties();
             block->setLethal(properties.HasProperty("lethal") && properties.GetNumericProperty("lethal") != 0);
-          }
-          blocks.push_back(block);
+          }*/
+          tiles.push_back(tile);
         }
       }
     }
   }
 
+  std::vector<std::tuple<Tile*, std::string>> tileParents;
+  std::unordered_map<std::string, Block*> namedBlocks;
+
   for(Tmx::ObjectGroup* objectGroup : map.GetObjectGroups())
   {
+    std::string const layerType = objectGroup->GetProperties().HasProperty("type") ? objectGroup->GetProperties().GetLiteralProperty("type") : "";
+    bool layerBlocking = objectGroup->GetProperties().HasProperty("block") && objectGroup->GetProperties().GetNumericProperty("block") == 1;
+    bool layerLethal = objectGroup->GetProperties().HasProperty("block") && objectGroup->GetProperties().GetNumericProperty("lethal") == 1;
+
     for(Tmx::Object* object : objectGroup->GetObjects())
     {
       int x = object->GetX();
-      int y = object->GetY() - map.GetTileHeight();
-      if(object->GetType() == "start")
+      int y = object->GetY();
+      std::string const& type = object->GetType().empty() ? layerType : object->GetType();
+
+      if(type == "start")
       {
         startX = x;
-        startY = y;
+        startY = y - map.GetTileHeight();
         player->respawn(startX, startY);
       }
-      else if(object->GetType() == "goal")
+      else if(type == "goal")
       {
-        goal->moveTo(x, y);
+        goal->moveTo(x, y - map.GetTileHeight());
       }
-      else if(object->GetType() == "block")
+      else if(type == "Block" )
       {
-        int tilesetIndex = map.FindTilesetIndex(object->GetGid());
-        int tileId = object->GetGid() - map.GetTileset(tilesetIndex)->GetFirstGid();
-        Tileset& tileset = tilesets.at(tilesetIndex);
-        Block* block = new Block(x, y, tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(tileId), this);
-        Tmx::Tile const* tile = map.GetTileset(tilesetIndex)->GetTile(tileId);
-
-        if(tile)
+        Block* block = new Block(x, y, object->GetWidth(), object->GetHeight(), this);
+        if(!object->GetName().empty())
         {
-          const Tmx::PropertySet& properties = tile->GetProperties();
-          block->setLethal(properties.HasProperty("lethal") && properties.GetNumericProperty("lethal") != 0);
+          namedBlocks[object->GetName()] = block;
         }
+        bool blocking = objectGroup->GetProperties().HasProperty("block") ? objectGroup->GetProperties().GetNumericProperty("block") == 1 : layerBlocking;
+        bool lethal = objectGroup->GetProperties().HasProperty("lethal") ? objectGroup->GetProperties().GetNumericProperty("lethal") == 1 : layerLethal;
+
+        block->setBlocking(blocking);
+        block->setLethal(lethal);
+
         if(object->GetProperties().HasProperty("path"))
         {
           std::cout << "block has path" << std::endl;
@@ -184,8 +195,8 @@ void GameState::loadLevel(const std::string& filename)
             for(int i = 0; i <= numPoints; ++i)
             {
               const Tmx::Point& point = getPoint(i % numPoints);
-              float px = static_cast<float>(point.x) + path->GetX() + (block->getX() - path->GetX());
-              float py = static_cast<float>(point.y) + path->GetY() + (block->getY() - path->GetY());
+              float px = static_cast<float>(point.x) + path->GetX() + (x - path->GetX());
+              float py = static_cast<float>(point.y) + path->GetY() + (y - path->GetY());
               float t = 0;
               const Tmx::Point& a = getPoint((i - 1) % numPoints);
               const Tmx::Point& b = getPoint(i % numPoints);
@@ -198,12 +209,41 @@ void GameState::loadLevel(const std::string& filename)
         }
         blocks.push_back(block);
       }
+      else if(object->GetGid() != 0)
+      {
+        int tilesetIndex = map.FindTilesetIndex(object->GetGid());
+        int tileId = object->GetGid() - map.GetTileset(tilesetIndex)->GetFirstGid();
+        Tileset& tileset = tilesets.at(tilesetIndex);
+        Tile* tile = new Tile(x, y - map.GetTileHeight(), tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(tileId), this);
+        if(object->GetProperties().HasProperty("parent"))
+        {
+          tileParents.push_back(make_tuple(tile, object->GetProperties().GetLiteralProperty("parent")));
+        }
+        tiles.push_back(tile);
+      }
+    }
+  }
+
+  for(auto tp : tileParents)
+  {
+    Tile* tile = std::get<0>(tp);
+    auto blockIter = namedBlocks.find(std::get<1>(tp));
+    if(blockIter != namedBlocks.end())
+    {
+      Block* block = blockIter->second;
+      block->addChildTile(tile);
     }
   }
 }
 
 void GameState::reset()
 {
+  for(Tile* tile : tiles)
+  {
+    delete tile;
+  }
+  tiles.clear();
+
   for(Block* block : blocks)
   {
     delete block;

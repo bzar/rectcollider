@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+  <tile id="1">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Base tile layer" width="50" height="30" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztl+EOgCAIhNX3f+j+5OaaTjhOgtZtbtUU+MLAaimlfmRk18+xt+n5jqy+duu9WLR+kLgicKDvU7OOkTN2/dLaYvtlqi6urXNX6/r9KY4msF3veeM61OebdTfyvtLatdQSq41oysgxizcjx0xZOKT1IorQ2hWJo8fSij6uKBwjA4sDPW8xehnCMPpm5QSx9cyB5XzN3FvSfDLP2h7/n6t4JT618zx4EGm/zQwc2j0aSZZ8vMnz9O/JcbpGzJ5Jet6OY+y7aN+SipGPbOMCcJcBQw==
+  </data>
+ </layer>
+ <objectgroup name="Moving platforms" width="50" height="30">
+  <object name="path2" x="208" y="304">
+   <polyline points="0,0 80,0 0,0"/>
+  </object>
+  <object name="path1" x="592" y="176">
+   <properties>
+    <property name="duration" value="20"/>
+   </properties>
+   <polygon points="0,0 0,48 -96,48 -96,80 -160,80 -160,-112 96,-112 96,0"/>
+  </object>
+  <object name="path3" x="496" y="448">
+   <polyline points="0,0 -128,0"/>
+  </object>
+  <object name="moving2" type="Block" x="144" y="304" width="64" height="16">
+   <properties>
+    <property name="block" value="1"/>
+    <property name="path" value="path2"/>
+   </properties>
+  </object>
+  <object name="moving3.1" type="Block" x="464" y="416" width="48" height="16">
+   <properties>
+    <property name="block" value="1"/>
+    <property name="path" value="path3"/>
+   </properties>
+  </object>
+  <object name="moving3.2" type="Block" x="496" y="432" width="16" height="32">
+   <properties>
+    <property name="block" value="1"/>
+    <property name="path" value="path3"/>
+   </properties>
+  </object>
+  <object name="moving1" type="Block" x="592" y="176" width="16" height="16">
+   <properties>
+    <property name="block" value="1"/>
+    <property name="path" value="path1"/>
+   </properties>
+  </object>
+  <object gid="1" x="144" y="320">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object gid="1" x="160" y="320">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object gid="1" x="192" y="320">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object gid="1" x="176" y="320">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object gid="1" x="464" y="432">
+   <properties>
+    <property name="parent" value="moving3.1"/>
+   </properties>
+  </object>
+  <object gid="1" x="480" y="432">
+   <properties>
+    <property name="parent" value="moving3.1"/>
+   </properties>
+  </object>
+  <object gid="1" x="496" y="432">
+   <properties>
+    <property name="parent" value="moving3.1"/>
+   </properties>
+  </object>
+  <object gid="1" x="496" y="448">
+   <properties>
+    <property name="parent" value="moving3.2"/>
+   </properties>
+  </object>
+  <object gid="1" x="496" y="464">
+   <properties>
+    <property name="parent" value="moving3.2"/>
+   </properties>
+  </object>
+  <object gid="1" x="592" y="192">
+   <properties>
+    <property name="parent" value="moving1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Static block" width="50" height="30" visible="0">
+  <properties>
+   <property name="block" value="1"/>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="16" height="480"/>
+  <object x="16" y="320" width="16" height="160"/>
+  <object x="32" y="368" width="32" height="112"/>
+  <object x="64" y="416" width="32" height="64"/>
+  <object x="96" y="464" width="704" height="16"/>
+  <object x="784" y="0" width="16" height="464"/>
+  <object x="16" y="0" width="768" height="16"/>
+  <object x="16" y="112" width="64" height="16"/>
+  <object x="112" y="96" width="32" height="16"/>
+  <object x="176" y="80" width="32" height="16"/>
+  <object x="240" y="64" width="32" height="16"/>
+  <object x="320" y="48" width="64" height="16"/>
+  <object x="368" y="64" width="32" height="16"/>
+  <object x="384" y="80" width="16" height="16"/>
+  <object x="336" y="96" width="32" height="16"/>
+  <object x="304" y="112" width="80" height="16"/>
+  <object x="320" y="128" width="16" height="48"/>
+  <object x="336" y="176" width="32" height="16"/>
+  <object x="368" y="128" width="16" height="48"/>
+  <object x="496" y="112" width="16" height="64"/>
+  <object x="512" y="176" width="32" height="16"/>
+  <object x="544" y="112" width="16" height="64"/>
+  <object x="512" y="96" width="32" height="16"/>
+  <object x="720" y="128" width="16" height="16"/>
+  <object x="736" y="176" width="16" height="16"/>
+  <object x="704" y="208" width="16" height="16"/>
+  <object x="656" y="240" width="16" height="16"/>
+  <object x="672" y="384" width="32" height="16"/>
+  <object x="704" y="432" width="32" height="16"/>
+  <object x="624" y="352" width="32" height="16"/>
+  <object x="624" y="368" width="16" height="96"/>
+  <object x="560" y="416" width="48" height="16"/>
+  <object x="288" y="304" width="32" height="16"/>
+  <object x="304" y="320" width="32" height="16"/>
+  <object x="320" y="336" width="80" height="16"/>
+  <object x="384" y="352" width="112" height="16"/>
+  <object x="480" y="336" width="96" height="16"/>
+  <object x="560" y="256" width="48" height="16"/>
+  <object x="544" y="272" width="80" height="16"/>
+  <object x="528" y="288" width="96" height="16"/>
+  <object x="544" y="304" width="64" height="16"/>
+  <object x="544" y="320" width="48" height="16"/>
+  <object x="64" y="304" width="80" height="16"/>
+  <object x="192" y="448" width="16" height="16"/>
+  <object x="256" y="432" width="16" height="16"/>
+  <object x="256" y="448" width="32" height="16"/>
+ </objectgroup>
+ <objectgroup name="Lethal block" width="50" height="30" visible="0">
+  <properties>
+   <property name="lethal" value="1"/>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="208" y="448" width="48" height="16"/>
+  <object x="512" y="320" width="32" height="16"/>
+ </objectgroup>
+ <objectgroup name="Entities" width="50" height="30" visible="0">
+  <object type="start" gid="3" x="752" y="464"/>
+  <object type="goal" gid="4" x="32" y="112"/>
+ </objectgroup>
+</map>

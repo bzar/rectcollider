@@ -7,7 +7,7 @@
 #include "ew/rectblockcollidableblock.h"
 #include "ew/state.h"
 #include "ew/rolemanager.h"
-#include "tileset.h"
+#include "tile.h"
 
 #include <vector>
 
@@ -38,11 +38,12 @@ public:
   bool getBlocking() const;
   void setBlocking(bool value);
 
+  void addChildTile(Tile* tile);
+
 protected:
   void followPath(float const delta);
 
   glhckObject* o;
-  RectCollisionInformation geometry;
 
   float x;
   float y;
