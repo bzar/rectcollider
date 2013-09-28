@@ -8,7 +8,7 @@
    </properties>
   </tile>
  </tileset>
- <layer name="Base tile layer" width="50" height="30" visible="0">
+ <layer name="Base tile layer" width="50" height="30">
   <data encoding="base64" compression="zlib">
    eJztl+EOgCAIhNX3f+j+5OaaTjhOgtZtbtUU+MLAaimlfmRk18+xt+n5jqy+duu9WLR+kLgicKDvU7OOkTN2/dLaYvtlqi6urXNX6/r9KY4msF3veeM61OebdTfyvtLatdQSq41oysgxizcjx0xZOKT1IorQ2hWJo8fSij6uKBwjA4sDPW8xehnCMPpm5QSx9cyB5XzN3FvSfDLP2h7/n6t4JT618zx4EGm/zQwc2j0aSZZ8vMnz9O/JcbpGzJ5Jet6OY+y7aN+SipGPbOMCcJcBQw==
   </data>
@@ -16,12 +16,6 @@
  <objectgroup name="Moving platforms" width="50" height="30">
   <object name="path2" x="208" y="304">
    <polyline points="0,0 80,0 0,0"/>
-  </object>
-  <object name="path1" x="592" y="176">
-   <properties>
-    <property name="duration" value="20"/>
-   </properties>
-   <polygon points="0,0 0,48 -96,48 -96,80 -160,80 -160,-112 96,-112 96,0"/>
   </object>
   <object name="path3" x="496" y="448">
    <polyline points="0,0 -128,0"/>
@@ -101,7 +95,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Static block" width="50" height="30" visible="0">
+ <objectgroup name="Static block" width="50" height="30">
   <properties>
    <property name="block" value="1"/>
    <property name="type" value="Block"/>
@@ -153,15 +147,21 @@
   <object x="256" y="432" width="16" height="16"/>
   <object x="256" y="448" width="32" height="16"/>
  </objectgroup>
- <objectgroup name="Lethal block" width="50" height="30" visible="0">
+ <objectgroup name="Lethal block" width="50" height="30">
   <properties>
    <property name="lethal" value="1"/>
    <property name="type" value="Block"/>
   </properties>
   <object x="208" y="448" width="48" height="16"/>
   <object x="512" y="320" width="32" height="16"/>
+  <object name="path1" x="592" y="176">
+   <properties>
+    <property name="duration" value="8"/>
+   </properties>
+   <polyline points="0,0 0,48 -128,48 -128,-112 112,-112 112,0 128,0 128,16 64,16 64,0 0,0"/>
+  </object>
  </objectgroup>
- <objectgroup name="Entities" width="50" height="30" visible="0">
+ <objectgroup name="Entities" width="50" height="30">
   <object type="start" gid="3" x="752" y="464"/>
   <object type="goal" gid="4" x="32" y="112"/>
  </objectgroup>
