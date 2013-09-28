@@ -59,6 +59,7 @@ int main(int argc, char** argv)
     return EXIT_FAILURE;
   }
 
+  glhckLogColor(0);
   if(!glhckDisplayCreate(WIDTH, HEIGHT, GLHCK_RENDER_AUTO))
   {
     std::cerr << "GLHCK display create error" << std::endl;
@@ -90,10 +91,7 @@ void gameloop(GLFWwindow* window)
   GlhckGLFWInterceptor glhckGLFWInterceptor;
   engine.addInterceptor(&glhckGLFWInterceptor);
 
-  std::vector<std::string> levels = {"levels/001.qmlon", "levels/002.qmlon", "levels/003.qmlon", "levels/004.qmlon",
-                                     "levels/005.qmlon", "levels/006.qmlon", "levels/007.qmlon", "levels/008.qmlon",
-                                     "levels/009.qmlon", "levels/010.qmlon", "levels/011.qmlon", "levels/012.qmlon",
-                                     "levels/013.qmlon"};
+  std::vector<std::string> levels = {"levels/test.tmx"};
   GameState gameState(levels);
   MenuState menuState({
                         new MenuSelect("Level", levels, [&gameState](std::string const& level) {gameState.setLevel(level);}),
@@ -120,6 +118,6 @@ void gameloop(GLFWwindow* window)
     double t = glfwGetTime();
     double dt = t - t0;
     t0 = t;
-    engine.advance(dt);
+    engine.advance(1.0f/60.0f);
   }
 }

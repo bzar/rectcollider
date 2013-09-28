@@ -1,22 +1,17 @@
 #include "block.h"
 #include "player.h"
+#include <iostream>
 
-Block::Block(float x, float y, float w, float h, std::vector<PathNode> const& path, ew::State *state) :
-  ew::Updatable(), ew::Renderable(), RectBlockCollidableBlock(),
-  o(nullptr), x(x), y(y), w(w), h(h), vx(0), vy(0), t(0), path(path),
-  state(state), roles(this, state)
+Block::Block(float x, float y, float w, float h, ew::State *state) :
+  ew::Updatable(), RectBlockCollidableBlock(), o(glhckObjectNew()),
+  x(x), y(y), w(w), h(h), vx(0), vy(0),
+  t(0), path(), roles(this, state)
 {
-  o = glhckPlaneNew(w, h);
-  glhckMaterial* mat = glhckMaterialNew(nullptr);
-  glhckMaterialDiffuseb(mat, 100, 64, 8, 255);
-  glhckObjectMaterial(o, mat);
-  glhckMaterialFree(mat);
-  glhckObjectPositionf(o, x, y, 0);
+  glhckObjectPositionf(o, x + w/2, y + h/2, 0);
 }
 
 Block::~Block()
 {
-  glhckObjectFree(o);
 }
 
 void Block::update(const float delta)
@@ -27,11 +22,6 @@ void Block::update(const float delta)
   y += vy * delta;
   glhckObjectPositionf(o, x + w/2, y + h/2, 0);
   colliding = false;
-}
-
-void Block::render()
-{
-  glhckObjectDraw(o);
 }
 
 ew::RectCollidable::RectCollisionInformation Block::getRectCollisionInformation()
@@ -82,4 +72,30 @@ void Block::followPath(const float delta)
     }
   }
 }
+bool Block::getBlocking() const
+{
+  return blocking;
+}
+
+void Block::setBlocking(bool value)
+{
+  blocking = value;
+}
+
+bool Block::getLethal() const
+{
+  return lethal;
+}
+
+void Block::setLethal(bool value)
+{
+  lethal = value;
+}
+
+
+void Block::setPath(const std::vector<PathNode>& value)
+{
+  path = value;
+}
+
 

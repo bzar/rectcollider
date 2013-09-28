@@ -3,11 +3,15 @@
 #include "ew/renderphase.h"
 #include "ew/rectblockcollidephase.h"
 #include "ew/rectcollidephase.h"
-#include "qmloninitializer.h"
-#include "qmloninitializershelpers.h"
+
+#include "Tmx.h"
+#include "tileset.h"
+
 #include "ew/engine.h"
 #include <algorithm>
-#include "enemyblock.h"
+
+#include <iostream>
+#include "glhck/glhck.h"
 
 GameState::GameState(std::vector<std::string> const& levelFilenames) : ew::State(),
   player(nullptr), blocks(), enemies(), levelFilenames(levelFilenames), levelIterator()
@@ -15,8 +19,8 @@ GameState::GameState(std::vector<std::string> const& levelFilenames) : ew::State
   phases = {new ew::UpdatePhase(this), new ew::RectBlockCollidePhase(this), new ew::RectCollidePhase(this),
             new GamePhase(this, this), new ew::RenderPhase(this) };
 
-  player = new Player(400, 240, 10, 10, this);
-  goal = new Goal(100, 100, 10, 10, this);
+  player = new Player(400, 240, 16, 16, this);
+  goal = new Goal(100, 100, 16, 16, this);
 
   levelIterator = levelFilenames.begin();
 
@@ -78,80 +82,124 @@ void GameState::setLevel(const std::string& filename)
 
 void GameState::loadLevel(const std::string& filename)
 {
-  qmlon::Initializer<Block::PathNode> pni({
-    {"x", qmlon::set(&Block::PathNode::x)},
-    {"y", qmlon::set(&Block::PathNode::y)},
-    {"t", qmlon::set(&Block::PathNode::t)}
-  });
+  Tmx::Map map;
+  map.ParseFile(filename);
+  std::vector<Tileset> tilesets;
 
-  qmlon::Initializer<GameState> gsi({
-    {"start", [&](GameState& gameState, qmlon::Value::Reference v) {
-       qmlon::Object& o = v->asObject();
-       startX = o.getProperty("x")->asFloat();
-       startY = o.getProperty("y")->asFloat();
-       gameState.player->respawn(startX, startY);
-    }},
-    {"goal", [&](GameState& gameState, qmlon::Value::Reference v) {
-       qmlon::Object& o = v->asObject();
-       float x = o.getProperty("x")->asFloat();
-       float y = o.getProperty("y")->asFloat();
-       gameState.goal->moveTo(x, y);
-    }}
-  }, {
-    {"Block", [&](GameState& gameState, qmlon::Object& o) {
-       float x = o.getProperty("x")->asFloat();
-       float y = o.getProperty("y")->asFloat();
-       float w = o.getProperty("w")->asFloat();
-       float h = o.getProperty("h")->asFloat();
-       std::vector<Block::PathNode> pathNodes;
+  for(Tmx::Tileset* tileset : map.GetTilesets())
+  {
+    tilesets.push_back(Tileset(tileset));
+  }
 
-       if(o.hasProperty("path")) {
-         qmlon::Value::List path = o.getProperty("path")->asList();
-         for(qmlon::Value::Reference& item : path)
-         {
-           Block::PathNode pathNode = qmlon::create(item->asObject(), pni);
-           pathNodes.push_back(pathNode);
-         }
-       }
+  int tileWidth = map.GetTileWidth();
+  int tileHeight = map.GetTileHeight();
 
-       Block* block = new Block(x, y, w, h, pathNodes, &gameState);
-       gameState.blocks.push_back(block);
-    }},
-    {"EnemyBlock", [&](GameState& gameState, qmlon::Object& o) {
-       float x = o.getProperty("x")->asFloat();
-       float y = o.getProperty("y")->asFloat();
-       float w = o.getProperty("w")->asFloat();
-       float h = o.getProperty("h")->asFloat();
-       std::vector<Block::PathNode> pathNodes;
+  for(Tmx::Layer* layer : map.GetLayers())
+  {
+    int layerWidth = layer->GetWidth();
+    int layerHeight = layer->GetHeight();
 
-       if(o.hasProperty("path")) {
-         qmlon::Value::List path = o.getProperty("path")->asList();
-         for(qmlon::Value::Reference& item : path)
-         {
-           Block::PathNode pathNode = qmlon::create(item->asObject(), pni);
-           pathNodes.push_back(pathNode);
-         }
-       }
+    for(int ty = 0; ty < layerHeight; ++ty)
+    {
+      for(int tx = 0; tx < layerWidth; ++tx)
+      {
+        Tmx::MapTile const& mapTile = layer->GetTile(tx, ty);
 
-       EnemyBlock* block = new EnemyBlock(x, y, w, h, pathNodes, &gameState);
-       gameState.blocks.push_back(block);
-    }},
-    {"Enemy", [&](GameState& gameState, qmlon::Object& o) {
-       float x = o.getProperty("x")->asFloat();
-       float y = o.getProperty("y")->asFloat();
-       float w = o.getProperty("w")->asFloat();
-       float h = o.getProperty("h")->asFloat();
-       float vx = o.getProperty("vx")->asFloat();
+        if(mapTile.tilesetId >= 0)
+        {
+          int x = tileWidth * tx;
+          int y = tileHeight * ty;
 
-       Enemy* enemy = new Enemy(x, y, w, h, vx, &gameState);
-       gameState.enemies.push_back(enemy);
-    }},
+          Tileset& tileset = tilesets.at(mapTile.tilesetId);
+          Block* block = new Block(x, y, tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(mapTile.id), this);
+          Tmx::Tile const* tile = map.GetTileset(mapTile.tilesetId)->GetTile(mapTile.id);
 
-  });
+          if(tile)
+          {
+            const Tmx::PropertySet& properties = tile->GetProperties();
+            block->setLethal(properties.HasProperty("lethal") && properties.GetNumericProperty("lethal") != 0);
+          }
+          blocks.push_back(block);
+        }
+      }
+    }
+  }
 
-  qmlon::Value::Reference fileContent = qmlon::readFile(filename);
-  reset();
-  gsi.init(*this, fileContent);
+  for(Tmx::ObjectGroup* objectGroup : map.GetObjectGroups())
+  {
+    for(Tmx::Object* object : objectGroup->GetObjects())
+    {
+      int x = object->GetX();
+      int y = object->GetY() - map.GetTileHeight();
+      if(object->GetType() == "start")
+      {
+        startX = x;
+        startY = y;
+        player->respawn(startX, startY);
+      }
+      else if(object->GetType() == "goal")
+      {
+        goal->moveTo(x, y);
+      }
+      else if(object->GetType() == "block")
+      {
+        int tilesetIndex = map.FindTilesetIndex(object->GetGid());
+        int tileId = object->GetGid() - map.GetTileset(tilesetIndex)->GetFirstGid();
+        Tileset& tileset = tilesets.at(tilesetIndex);
+        Block* block = new Block(x, y, tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(tileId), this);
+        Tmx::Tile const* tile = map.GetTileset(tilesetIndex)->GetTile(tileId);
+
+        if(tile)
+        {
+          const Tmx::PropertySet& properties = tile->GetProperties();
+          block->setLethal(properties.HasProperty("lethal") && properties.GetNumericProperty("lethal") != 0);
+        }
+        if(object->GetProperties().HasProperty("path"))
+        {
+          std::cout << "block has path" << std::endl;
+          std::string pathName = object->GetProperties().GetLiteralProperty("path");
+          auto iter = std::find_if(objectGroup->GetObjects().begin(), objectGroup->GetObjects().end(), [&pathName](Tmx::Object* o) {
+            return o->GetName() == pathName;
+          });
+
+          if(iter != objectGroup->GetObjects().end())
+          {
+            std::cout << "path object found" << std::endl;
+            Tmx::Object* path = *iter;
+            const Tmx::Polygon* polygon = path->GetPolygon();
+            const Tmx::Polyline* polyline = path->GetPolyline();
+
+            auto getPoint = [polygon, polyline](int i) { return polygon ? polygon->GetPoint(i) : polyline->GetPoint(i); };
+            int numPoints = polygon ? polygon->GetNumPoints() : polyline->GetNumPoints();
+
+            float duration = path->GetProperties().HasProperty("duration") ? path->GetProperties().GetFloatProperty("duration") : 5.0f;
+            float length = 0;
+            for(int i = 1; i <= numPoints; ++i)
+            {
+              const Tmx::Point& a = getPoint((i - 1) % numPoints);
+              const Tmx::Point& b = getPoint(i % numPoints);
+              length += sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+            }
+            std::vector<Block::PathNode> pathNodes;
+            for(int i = 0; i <= numPoints; ++i)
+            {
+              const Tmx::Point& point = getPoint(i % numPoints);
+              float px = static_cast<float>(point.x) + path->GetX() + (block->getX() - path->GetX());
+              float py = static_cast<float>(point.y) + path->GetY() + (block->getY() - path->GetY());
+              float t = 0;
+              const Tmx::Point& a = getPoint((i - 1) % numPoints);
+              const Tmx::Point& b = getPoint(i % numPoints);
+              double l = sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+              t = duration * l / length;
+              pathNodes.push_back({px, py, t});
+            }
+            block->setPath(pathNodes);
+          }
+        }
+        blocks.push_back(block);
+      }
+    }
+  }
 }
 
 void GameState::reset()

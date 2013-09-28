@@ -7,8 +7,8 @@
 
 #include "block.h"
 #include "enemy.h"
-#include "enemyblock.h"
 #include "goal.h"
+#include <iostream>
 
 Player::Player(float x, float y, float w, float h, ew::State* state) :
   ew::Updatable(), ew::Renderable(), RectBlockCollidableActor(),
@@ -37,13 +37,13 @@ void Player::update(const float delta)
 
   vx = 0;
   if(onGround)
-    vy = 0;
+    vy = 1/delta;
   else
     vy += 2000 * delta;
 
   if(glfwGetKey(ctx->window, GLFW_KEY_UP) == GLFW_PRESS && onGround)
   {
-    vy = -550;
+    vy = -650;
   }
   if(glfwGetKey(ctx->window, GLFW_KEY_LEFT) == GLFW_PRESS)
   {
@@ -55,7 +55,7 @@ void Player::update(const float delta)
   }
 
   x += vx * delta;
-  y += min(250, max(-250, vy)) * delta;
+  y += min(280, max(-280, vy)) * delta;
   colliding = false;
   onGround = false;
 }
@@ -70,15 +70,13 @@ void Player::render()
 
 ew::RectCollidable::RectCollisionInformation Player::getRectCollisionInformation()
 {
-  return {x, y, w, h, vx, vy};
+  return {x, y, w, h, vx, min(280, max(-280, vy))};
 }
 
 void Player::setRectCollisionInformation(const RectCollidable::RectCollisionInformation &newRectCollisionInformation)
 {
   x = newRectCollisionInformation.x;
   y = newRectCollisionInformation.y;
-  vx = newRectCollisionInformation.vx;
-  vy = newRectCollisionInformation.vy;
 }
 
 void Player::handleRectCollision(RectCollidable* other)
@@ -86,12 +84,13 @@ void Player::handleRectCollision(RectCollidable* other)
   if(typeid(*other) == typeid(Block))
   {
     colliding = true;
+    Block* block = static_cast<Block*>(other);
+    if(block->getLethal())
+    {
+      alive = false;
+    }
   }
   else if(typeid(*other) == typeid(Enemy))
-  {
-    alive = false;
-  }
-  else if(typeid(*other) == typeid(EnemyBlock))
   {
     alive = false;
   }

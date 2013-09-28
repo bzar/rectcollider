@@ -3,15 +3,15 @@
 
 #include "glhck/glhck.h"
 
-#include "ew/renderable.h"
 #include "ew/updatable.h"
 #include "ew/rectblockcollidableblock.h"
 #include "ew/state.h"
 #include "ew/rolemanager.h"
+#include "tileset.h"
 
 #include <vector>
 
-class Block : public ew::Updatable, public ew::Renderable, public ew::RectBlockCollidableBlock
+class Block : public ew::Updatable, public ew::RectBlockCollidableBlock
 {
 public:
   struct PathNode
@@ -21,20 +21,29 @@ public:
     float t;
   };
 
-  Block(float x, float y, float w, float h, std::vector<PathNode> const& path, ew::State* state);
+  Block(float x, float y, float w, float h, ew::State* state);
   ~Block();
 
-  void render();
   void update(float const delta);
 
   RectCollisionInformation getRectCollisionInformation();
   void setRectCollisionInformation(const RectCollisionInformation &newRectCollisionInformation);
   void handleRectCollision(RectCollidable *other);
 
+  void setPath(const std::vector<PathNode>& value);
+
+  bool getLethal() const;
+  void setLethal(bool value);
+
+  bool getBlocking() const;
+  void setBlocking(bool value);
+
 protected:
   void followPath(float const delta);
 
   glhckObject* o;
+  RectCollisionInformation geometry;
+
   float x;
   float y;
   float w;
@@ -43,11 +52,12 @@ protected:
   float vy;
   float t;
   bool colliding = false;
+  bool lethal = false;
+  bool blocking = false;
   std::vector<PathNode> path;
   unsigned int pathNodeIndex;
 
-  ew::State* state;
-  ew::RoleManager<Block, ew::Updatable, ew::Renderable, RectBlockCollidableBlock, RectCollidable> roles;
+  ew::RoleManager<Block, ew::Updatable, RectBlockCollidableBlock, RectCollidable> roles;
 };
 
 #endif // BLOCK_H

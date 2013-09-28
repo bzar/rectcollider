@@ -7,6 +7,7 @@
 #include "player.h"
 #include "goal.h"
 #include "block.h"
+#include "tile.h"
 #include "enemy.h"
 #include <vector>
 #include <string>
@@ -31,6 +32,7 @@ private:
   float startY;
   Player* player;
   Goal* goal;
+  std::vector<Tile*> tiles;
   std::vector<Block*> blocks;
   std::vector<Enemy*> enemies;
   std::vector<std::string> levelFilenames;

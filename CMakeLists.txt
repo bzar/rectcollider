@@ -9,6 +9,7 @@ include_directories(
   ${glhck_SOURCE_DIR}/include
   ${GLFW_SOURCE_DIR}/include
   ${engineworks_SOURCE_DIR}/include
+  ${tmxparser_SOURCE_DIR}/include
 )
 
 file(GLOB SOURCES src/*.cpp src/**/*.cpp )
@@ -16,6 +17,6 @@ add_definitions(-DGLHCK_KAZMATH_FLOAT -DUSE_SINGLE_PRECISION)
 list(APPEND CMAKE_CXX_FLAGS -std=c++11)
 add_executable(rectcollider ${SOURCES})
 
-target_link_libraries(rectcollider engineworks qmlon glfw glhck ${GLFW_LIBRARIES})
+target_link_libraries(rectcollider engineworks tmxparser glfw glhck ${GLFW_LIBRARIES})
 
 file(COPY levels DESTINATION .)
