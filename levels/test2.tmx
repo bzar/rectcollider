@@ -94,6 +94,12 @@
     <property name="parent" value="moving1"/>
    </properties>
   </object>
+  <object name="path1" x="592" y="176">
+   <properties>
+    <property name="duration" value="10"/>
+   </properties>
+   <polyline points="0,0 0,48 -128,48 -128,-112 112,-112 112,0 128,0 128,16 64,16 64,0 0,0"/>
+  </object>
  </objectgroup>
  <objectgroup name="Static block" width="50" height="30">
   <properties>
@@ -154,12 +160,6 @@
   </properties>
   <object x="208" y="448" width="48" height="16"/>
   <object x="512" y="320" width="32" height="16"/>
-  <object name="path1" x="592" y="176">
-   <properties>
-    <property name="duration" value="8"/>
-   </properties>
-   <polyline points="0,0 0,48 -128,48 -128,-112 112,-112 112,0 128,0 128,16 64,16 64,0 0,0"/>
-  </object>
  </objectgroup>
  <objectgroup name="Entities" width="50" height="30">
   <object type="start" gid="3" x="752" y="464"/>

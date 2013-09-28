@@ -20,7 +20,7 @@ void Block::update(const float delta)
 
   x += vx * delta;
   y += vy * delta;
-  glhckObjectPositionf(o, x, y, 0);
+  glhckObjectPositionf(o, roundf(x), roundf(y), 0);
   colliding = false;
 }
 

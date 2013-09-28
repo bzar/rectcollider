@@ -39,6 +39,7 @@ private:
   float h;
   float vx;
   float vy;
+  float v0;
   bool colliding = false;
   bool onGround = false;
   bool alive = true;

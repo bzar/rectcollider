@@ -12,7 +12,7 @@
 
 Player::Player(float x, float y, float w, float h, ew::State* state) :
   ew::Updatable(), ew::Renderable(), RectBlockCollidableActor(),
-  o(nullptr), x(x), y(y), w(w), h(h), vx(0), vy(0),
+  o(nullptr), x(x), y(y), w(w), h(h), vx(0), vy(0), v0(0),
   state(state), roles(this, state)
 {
   o = glhckPlaneNew(w, h);
@@ -35,7 +35,7 @@ void Player::update(const float delta)
 
   GLFWContext* ctx = state->engine->singletons.get<GLFWContext>();
 
-  vx = 0;
+  vx = v0;
   if(onGround)
     vy = 1/delta;
   else
@@ -58,6 +58,7 @@ void Player::update(const float delta)
   y += min(280, max(-280, vy)) * delta;
   colliding = false;
   onGround = false;
+  v0 = 0;
 }
 
 void Player::render()
@@ -110,8 +111,10 @@ bool Player::verticalRectBlockCollision(ew::RectBlockCollidableBlock &block, con
 {
   RectCollisionInformation b =  block.getRectCollisionInformation();
   if(b.y > y)
+  {
     onGround = true;
-  x += b.vx * delta;
+    v0 = b.vx;
+  }
   return RectBlockCollidableActor::verticalRectBlockCollision(block, delta);
 }
 
