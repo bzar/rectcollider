@@ -10,7 +10,7 @@
  </tileset>
  <layer name="Base tile layer" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztl+EOgCAIhNX3f+j+5OaaTjhOgtZtbtUU+MLAaimlfmRk18+xt+n5jqy+duu9WLR+kLgicKDvU7OOkTN2/dLaYvtlqi6urXNX6/r9KY4msF3veeM61OebdTfyvtLatdQSq41oysgxizcjx0xZOKT1IorQ2hWJo8fSij6uKBwjA4sDPW8xehnCMPpm5QSx9cyB5XzN3FvSfDLP2h7/n6t4JT618zx4EGm/zQwc2j0aSZZ8vMnz9O/JcbpGzJ5Jet6OY+y7aN+SipGPbOMCcJcBQw==
+   eJztV9EKgDAIdKP//+ZeCkY0pudlGh0MipznpTlrItI+sqrj17H2GfmOvFyr/VFarDxIXNE6tsVz1C/TduWDVdNWX2xeJtrk2ms723feP6WjK3y3w27ch3K+2Xcz15XVr6eXeH1kQ0Udd/FW1HGHKjq0/SIL0N6VSccZSxd7XFl0jBpYOtB5i3GWIRpGblZOEF/XHHjma2ZtafPJnLUj/j9n8Wo4rXYRehBYv80KOqw1mgmefLyp58pv0cHgfgra2Rbt1V3ws9fKpbX7ytoBpH8BOw==
   </data>
  </layer>
  <objectgroup name="Moving platforms" width="50" height="30">
@@ -106,11 +106,11 @@
    <property name="block" value="1"/>
    <property name="type" value="Block"/>
   </properties>
-  <object x="0" y="0" width="16" height="480"/>
-  <object x="16" y="320" width="16" height="160"/>
-  <object x="32" y="368" width="32" height="112"/>
-  <object x="64" y="416" width="32" height="64"/>
-  <object x="96" y="464" width="704" height="16"/>
+  <object x="0" y="0" width="16" height="432"/>
+  <object x="16" y="320" width="16" height="112"/>
+  <object x="32" y="368" width="32" height="64"/>
+  <object x="64" y="416" width="32" height="16"/>
+  <object x="0" y="464" width="800" height="16"/>
   <object x="784" y="0" width="16" height="464"/>
   <object x="16" y="0" width="768" height="16"/>
   <object x="16" y="112" width="64" height="16"/>
@@ -162,7 +162,17 @@
   <object x="512" y="320" width="32" height="16"/>
  </objectgroup>
  <objectgroup name="Entities" width="50" height="30">
-  <object type="start" gid="3" x="752" y="464"/>
-  <object type="goal" gid="4" x="32" y="112"/>
+  <object type="Exit" x="-16" y="432" width="16" height="32">
+   <properties>
+    <property name="destination" value="test3.tmx"/>
+    <property name="id" value="1"/>
+   </properties>
+  </object>
+  <object type="Entrance" x="0" y="448" width="16" height="16">
+   <properties>
+    <property name="id" value="0"/>
+   </properties>
+  </object>
+  <object type="Exit" x="32" y="96" width="16" height="16"/>
  </objectgroup>
 </map>

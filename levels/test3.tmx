@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+  <tile id="1">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Base tile layer" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzwENADAIwDDwb/o2dtImE7CdmT3S73y0+Gjx0eKjxUeLjxYfLT5afLT4aPHR4qPFR8+ljws9OtEAmw==
+  </data>
+ </layer>
+ <objectgroup name="Moving platforms" width="50" height="30"/>
+ <objectgroup name="Static block" width="50" height="30">
+  <properties>
+   <property name="block" value="1"/>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="16" height="480"/>
+  <object x="16" y="464" width="784" height="16"/>
+  <object x="784" y="0" width="16" height="432"/>
+  <object x="16" y="0" width="768" height="16"/>
+ </objectgroup>
+ <objectgroup name="Lethal block" width="50" height="30">
+  <properties>
+   <property name="lethal" value="1"/>
+   <property name="type" value="Block"/>
+  </properties>
+ </objectgroup>
+ <objectgroup name="Entities" width="50" height="30">
+  <object type="Exit" x="800" y="432" width="16" height="32">
+   <properties>
+    <property name="destination" value="test2.tmx"/>
+    <property name="id" value="0"/>
+   </properties>
+  </object>
+  <object type="Entrance" x="784" y="448" width="16" height="16">
+   <properties>
+    <property name="id" value="1"/>
+   </properties>
+  </object>
+  <object type="Entrance" x="719" y="425" width="16" height="16">
+   <properties>
+    <property name="id" value="0"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

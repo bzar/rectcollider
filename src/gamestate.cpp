@@ -8,41 +8,22 @@
 
 #include "tileset.h"
 #include "tile.h"
+#include "exit.h"
 
 #include "ew/engine.h"
 #include <algorithm>
 
 #include <iostream>
 #include "glhck/glhck.h"
+#include <boost/filesystem.hpp>
 
-GameState::GameState(std::vector<std::string> const& levelFilenames) : ew::State(),
-  player(nullptr), blocks(), enemies(), levelFilenames(levelFilenames), levelIterator()
+GameState::GameState(std::string const& levelPath, std::string const& firstLevel) : ew::State(),
+  levelPath(levelPath), firstLevel(firstLevel), player(nullptr), tiles(), blocks(), enemies()
 {
   phases = {new ew::UpdatePhase(this), new ew::RectBlockCollidePhase(this), new ew::RectCollidePhase(this),
             new GamePhase(this, this), new ew::RenderPhase(this) };
 
   player = new Player(400, 240, 16, 16, this);
-  goal = new Goal(100, 100, 16, 16, this);
-
-  levelIterator = levelFilenames.begin();
-
-
-  /*blocks = {
-    new Block{0, 0, 10, 480, {}, this},
-    new Block{800 - 10, 0, 10, 480, {}, this},
-    new Block{11, 0, 800 - 22, 10, {}, this},
-    new Block{11, 480 - 10, 800 - 22, 10, {}, this},
-    new Block{70, 70, 150, 150, {{70, 70, 0}, {270, 270, 5}, {70, 70, 7}}, this},
-    new Block{470, 100, 150, 10, {{470, 100, 0}, {470, 300, 3}, {470, 100, 3}}, this},
-    new Block{490, 90, 130, 10, {}, this},
-    new Block{470, 310, 180, 10, {}, this},
-    new Block{10, 70, 50, 10, {{11, 70, 0}, {11, 70, 1}, {11, 480 - 21, 2}, {11, 480 - 21, 1}, {11, 70, 2}}, this},
-  };
-
-  enemies = {
-    new Enemy{120, 20, 10, 10, -40, this},
-    new Enemy{470, 90, 10, 10, 49, this}
-  };*/
 }
 
 GameState::~GameState()
@@ -53,7 +34,7 @@ GameState::~GameState()
 
 void GameState::enter()
 {
-  loadLevel(*levelIterator);
+  loadLevel(firstLevel);
   glhckColorb bgColor = {90, 134, 255, 255};
   glhckRenderClearColor(&bgColor);
 }
@@ -62,35 +43,25 @@ void GameState::gamePhase(const float delta)
 {
   if(!player->getAlive())
     player->respawn(startX, startY);
+}
 
-  if(player->getVictorious())
+void GameState::loadLevel(const std::string& filename, int entranceId)
+{
+  if(filename.empty())
   {
-    ++levelIterator;
-    if(levelIterator == levelFilenames.end())
-    {
-      engine->quit();
-    }
-    else
-    {
-      loadLevel(*levelIterator);
-    }
+    engine->quit();
+    return;
   }
-}
+  reset();
+  boost::filesystem::path path = boost::filesystem::path(levelPath) / boost::filesystem::path(filename);
 
-void GameState::setLevel(const std::string& filename)
-{
-  levelIterator = std::find(levelFilenames.begin(), levelFilenames.end(), filename);
-}
-
-void GameState::loadLevel(const std::string& filename)
-{
   Tmx::Map map;
-  map.ParseFile(filename);
+  map.ParseFile(path.generic_string());
   std::vector<Tileset> tilesets;
 
   for(Tmx::Tileset* tileset : map.GetTilesets())
   {
-    tilesets.push_back(Tileset(tileset));
+    tilesets.push_back(Tileset(tileset, levelPath));
   }
 
   int tileWidth = map.GetTileWidth();
@@ -114,13 +85,6 @@ void GameState::loadLevel(const std::string& filename)
 
           Tileset& tileset = tilesets.at(mapTile.tilesetId);
           Tile* tile = new Tile(x, y, tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(mapTile.id), this);
-          /*Tmx::Tile const* tile = map.GetTileset(mapTile.tilesetId)->GetTile(mapTile.id);
-
-          if(tile)
-          {
-            const Tmx::PropertySet& properties = tile->GetProperties();
-            block->setLethal(properties.HasProperty("lethal") && properties.GetNumericProperty("lethal") != 0);
-          }*/
           tiles.push_back(tile);
         }
       }
@@ -142,15 +106,22 @@ void GameState::loadLevel(const std::string& filename)
       int y = object->GetY();
       std::string const& type = object->GetType().empty() ? layerType : object->GetType();
 
-      if(type == "start")
+      if(type == "Entrance")
       {
-        startX = x;
-        startY = y - map.GetTileHeight();
-        player->respawn(startX, startY);
+        int id = object->GetProperties().HasProperty("id") ? object->GetProperties().GetNumericProperty("id") : 0;
+        if(id == entranceId)
+        {
+          startX = x;
+          startY = y;
+          player->respawn(startX, startY);
+        }
       }
-      else if(type == "goal")
+      else if(type == "Exit")
       {
-        goal->moveTo(x, y - map.GetTileHeight());
+        std::cout << "created Exit at " << x << " " << y << " " << object->GetWidth() << " " << object->GetHeight() << " " << std::endl;
+        int id = object->GetProperties().HasProperty("id") ? object->GetProperties().GetNumericProperty("id") : 0;
+        std::string destination = object->GetProperties().HasProperty("destination") ? object->GetProperties().GetLiteralProperty("destination") : "";
+        new Exit(destination, id, x, y, object->GetWidth(), object->GetHeight(), this);
       }
       else if(type == "Block" )
       {
@@ -167,7 +138,6 @@ void GameState::loadLevel(const std::string& filename)
 
         if(object->GetProperties().HasProperty("path"))
         {
-          std::cout << "block has path" << std::endl;
           std::string pathName = object->GetProperties().GetLiteralProperty("path");
           auto iter = std::find_if(objectGroup->GetObjects().begin(), objectGroup->GetObjects().end(), [&pathName](Tmx::Object* o) {
             return o->GetName() == pathName;
@@ -175,7 +145,6 @@ void GameState::loadLevel(const std::string& filename)
 
           if(iter != objectGroup->GetObjects().end())
           {
-            std::cout << "path object found" << std::endl;
             Tmx::Object* path = *iter;
             const Tmx::Polygon* polygon = path->GetPolygon();
             const Tmx::Polyline* polyline = path->GetPolyline();

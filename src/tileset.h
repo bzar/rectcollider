@@ -9,7 +9,7 @@
 class Tileset
 {
 public:
-  Tileset(Tmx::Tileset* tileset);
+  Tileset(Tmx::Tileset* tileset, std::string const& path);
   Tileset(Tileset const& other);
   ~Tileset();
   glhckRect getRect(int const tileId) const;

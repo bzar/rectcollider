@@ -1,16 +1,16 @@
 #include "tileset.h"
 #include "TmxImage.h"
-#include <iostream>
+#include "boost/filesystem.hpp"
 
-Tileset::Tileset(Tmx::Tileset* tileset) :
+Tileset::Tileset(Tmx::Tileset* tileset, const std::string& path) :
   texture(nullptr), imageWidth(tileset->GetImage()->GetWidth()), imageHeight(tileset->GetImage()->GetHeight()),
   tileWidth(tileset->GetTileWidth()), tileHeight(tileset->GetTileHeight()),
   firstId(tileset->GetFirstGid()), margin(tileset->GetMargin()), spacing(tileset->GetSpacing())
 {
   const Tmx::Image* image = tileset->GetImage();
-  const std::string source = image->GetSource();
-
-  texture = glhckTextureNewFromFile(source.data(), glhckImportDefaultImageParameters(), glhckTextureDefaultSpriteParameters());
+  const std::string imageFilename = image->GetSource();
+  boost::filesystem::path imagePath = boost::filesystem::path(path) / boost::filesystem::path(imageFilename);
+  texture = glhckTextureNewFromFile(imagePath.generic_string().data(), glhckImportDefaultImageParameters(), glhckTextureDefaultSpriteParameters());
 }
 
 Tileset::Tileset(const Tileset& other) :

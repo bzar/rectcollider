@@ -91,11 +91,11 @@ void gameloop(GLFWwindow* window)
   GlhckGLFWInterceptor glhckGLFWInterceptor;
   engine.addInterceptor(&glhckGLFWInterceptor);
 
-  std::vector<std::string> levels = {"levels/test2.tmx"};
-  GameState gameState(levels);
+  //std::vector<std::string> levels = {"levels/test3.tmx"};
+  GameState gameState("levels", "test3.tmx");
   MenuState menuState({
                         new MenuAction("Start", [](MenuState* s) { s->engine->setState(1);}),
-                        new MenuSelect("Level", levels, [&gameState](std::string const& level) {gameState.setLevel(level);}),
+//                        new MenuSelect("Level", levels, [&gameState](std::string const& level) {gameState.setLevel(level);}),
                         new Submenu("Title 1", {
                                       new Submenu("Title 1-1"),
                                       new Submenu("Title 1-2"),

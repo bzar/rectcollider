@@ -6,13 +6,14 @@
 #include "ew/updatable.h"
 #include "ew/renderable.h"
 #include "ew/rectblockcollidableactor.h"
-#include "ew/state.h"
 #include "ew/rolemanager.h"
+
+class GameState;
 
 class Player : public ew::Updatable, public ew::Renderable, public ew::RectBlockCollidableActor
 {
 public:
-  Player(float x, float y, float w, float h, ew::State* state);
+  Player(float x, float y, float w, float h, GameState* state);
   ~Player();
 
   void update(const float delta) override;
@@ -45,7 +46,7 @@ private:
   bool alive = true;
   bool victorious = false;
 
-  ew::State* state;
+  GameState* state;
   ew::RoleManager<Player, ew::Updatable, ew::Renderable, RectBlockCollidableActor, RectCollidable> roles;
 };
 

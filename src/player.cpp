@@ -8,9 +8,12 @@
 #include "block.h"
 #include "enemy.h"
 #include "goal.h"
+#include "exit.h"
+#include "gamestate.h"
+
 #include <iostream>
 
-Player::Player(float x, float y, float w, float h, ew::State* state) :
+Player::Player(float x, float y, float w, float h, GameState* state) :
   ew::Updatable(), ew::Renderable(), RectBlockCollidableActor(),
   o(nullptr), x(x), y(y), w(w), h(h), vx(0), vy(0), v0(0),
   state(state), roles(this, state)
@@ -98,6 +101,12 @@ void Player::handleRectCollision(RectCollidable* other)
   else if(typeid(*other) == typeid(Goal))
   {
     setVictorious(true);
+  }
+  else if(typeid(*other) == typeid(Exit))
+  {
+    std::cout << "Exit" << std::endl;
+    Exit* exit = static_cast<Exit*>(other);
+    state->loadLevel(exit->getDestination(), exit->getId());
   }
 
 }
