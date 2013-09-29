@@ -35,9 +35,6 @@ public:
   bool getLethal() const;
   void setLethal(bool value);
 
-  bool getBlocking() const;
-  void setBlocking(bool value);
-
   void addChildTile(Tile* tile);
 
 protected:
@@ -54,7 +51,6 @@ protected:
   float t;
   bool colliding = false;
   bool lethal = false;
-  bool blocking = false;
   std::vector<PathNode> path;
   unsigned int pathNodeIndex;
 

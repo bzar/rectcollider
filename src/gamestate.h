@@ -7,6 +7,7 @@
 #include "player.h"
 #include "block.h"
 #include "tile.h"
+#include "exit.h"
 #include "enemy.h"
 #include <vector>
 #include <string>
@@ -34,6 +35,7 @@ private:
   float startX;
   float startY;
   Player* player;
+  std::vector<Exit*> exits;
   std::vector<Tile*> tiles;
   std::vector<Block*> blocks;
   std::vector<Enemy*> enemies;

@@ -92,7 +92,7 @@ void gameloop(GLFWwindow* window)
   engine.addInterceptor(&glhckGLFWInterceptor);
 
   //std::vector<std::string> levels = {"levels/test3.tmx"};
-  GameState gameState("levels", "test3.tmx");
+  GameState gameState("levels", "0001.tmx");
   MenuState menuState({
                         new MenuAction("Start", [](MenuState* s) { s->engine->setState(1);}),
 //                        new MenuSelect("Level", levels, [&gameState](std::string const& level) {gameState.setLevel(level);}),
@@ -119,5 +119,6 @@ void gameloop(GLFWwindow* window)
     double dt = t - t0;
     t0 = t;
     engine.advance(1.0f/60.0f);
+    //engine.advance(dt);
   }
 }

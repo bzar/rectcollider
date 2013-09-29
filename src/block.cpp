@@ -72,15 +72,6 @@ void Block::followPath(const float delta)
     }
   }
 }
-bool Block::getBlocking() const
-{
-  return blocking;
-}
-
-void Block::setBlocking(bool value)
-{
-  blocking = value;
-}
 
 void Block::addChildTile(Tile* tile)
 {

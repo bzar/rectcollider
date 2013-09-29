@@ -18,9 +18,9 @@
 #include <boost/filesystem.hpp>
 
 GameState::GameState(std::string const& levelPath, std::string const& firstLevel) : ew::State(),
-  levelPath(levelPath), firstLevel(firstLevel), player(nullptr), tiles(), blocks(), enemies()
+  levelPath(levelPath), firstLevel(firstLevel), player(nullptr), exits(), tiles(), blocks(), enemies()
 {
-  phases = {new ew::UpdatePhase(this), new ew::RectBlockCollidePhase(this), new ew::RectCollidePhase(this),
+  phases = {new ew::UpdatePhase(this), new ew::RectCollidePhase(this), new ew::RectBlockCollidePhase(this),
             new GamePhase(this, this), new ew::RenderPhase(this) };
 
   player = new Player(400, 240, 16, 16, this);
@@ -97,7 +97,6 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
   for(Tmx::ObjectGroup* objectGroup : map.GetObjectGroups())
   {
     std::string const layerType = objectGroup->GetProperties().HasProperty("type") ? objectGroup->GetProperties().GetLiteralProperty("type") : "";
-    bool layerBlocking = objectGroup->GetProperties().HasProperty("block") && objectGroup->GetProperties().GetNumericProperty("block") == 1;
     bool layerLethal = objectGroup->GetProperties().HasProperty("block") && objectGroup->GetProperties().GetNumericProperty("lethal") == 1;
 
     for(Tmx::Object* object : objectGroup->GetObjects())
@@ -121,7 +120,7 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
         std::cout << "created Exit at " << x << " " << y << " " << object->GetWidth() << " " << object->GetHeight() << " " << std::endl;
         int id = object->GetProperties().HasProperty("id") ? object->GetProperties().GetNumericProperty("id") : 0;
         std::string destination = object->GetProperties().HasProperty("destination") ? object->GetProperties().GetLiteralProperty("destination") : "";
-        new Exit(destination, id, x, y, object->GetWidth(), object->GetHeight(), this);
+        exits.push_back(new Exit(destination, id, x, y, object->GetWidth(), object->GetHeight(), this));
       }
       else if(type == "Block" )
       {
@@ -130,10 +129,8 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
         {
           namedBlocks[object->GetName()] = block;
         }
-        bool blocking = objectGroup->GetProperties().HasProperty("block") ? objectGroup->GetProperties().GetNumericProperty("block") == 1 : layerBlocking;
-        bool lethal = objectGroup->GetProperties().HasProperty("lethal") ? objectGroup->GetProperties().GetNumericProperty("lethal") == 1 : layerLethal;
 
-        block->setBlocking(blocking);
+        bool lethal = object->GetProperties().HasProperty("lethal") ? object->GetProperties().GetNumericProperty("lethal") == 1 : layerLethal;
         block->setLethal(lethal);
 
         if(object->GetProperties().HasProperty("path"))
@@ -207,6 +204,12 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
 
 void GameState::reset()
 {
+  for(Exit* exit : exits)
+  {
+    delete exit;
+  }
+  exits.clear();
+
   for(Tile* tile : tiles)
   {
     delete tile;

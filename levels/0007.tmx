@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1DEKwDAIBVADvf+Zs3YJcUiK0ic8CBmUP+iIiAHAp7qXHLVKjlrVOcfzep/OsbqDmf9Vn92MG3e3e45dXznys7rt+R9yAABUMAEWbQP7
+  </data>
+ </layer>
+ <objectgroup name="Block" width="50" height="30">
+  <properties>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="800" height="112"/>
+  <object x="0" y="112" width="16" height="192"/>
+  <object x="784" y="112" width="16" height="96"/>
+  <object x="0" y="304" width="800" height="176"/>
+  <object x="400" y="208" width="64" height="64"/>
+  <object x="304" y="208" width="64" height="32"/>
+  <object x="272" y="240" width="96" height="32"/>
+  <object x="496" y="208" width="48" height="64"/>
+  <object x="592" y="208" width="48" height="64"/>
+  <object x="704" y="208" width="96" height="96"/>
+ </objectgroup>
+ <objectgroup name="Object Layer 1" width="50" height="30">
+  <object type="Entrance" x="32" y="272" width="16" height="16"/>
+  <object type="Exit" x="736" y="192" width="16" height="16">
+   <properties>
+    <property name="destination" value="0008.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

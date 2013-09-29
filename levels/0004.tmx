@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1LkJADAMBEEJ3H/NTl2B0TMHA0o3UUZEAsBi3aej1nTUWueO89y/Oqb8XR07OwAAKrhJRwRh
+  </data>
+ </layer>
+ <objectgroup name="Block" width="50" height="30">
+  <properties>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="800" height="144"/>
+  <object x="0" y="144" width="16" height="160"/>
+  <object x="784" y="144" width="16" height="96"/>
+  <object x="0" y="304" width="400" height="176"/>
+  <object x="400" y="240" width="400" height="240"/>
+ </objectgroup>
+ <objectgroup name="Object Layer 1" width="50" height="30">
+  <object type="Entrance" x="32" y="160" width="16" height="16"/>
+  <object type="Exit" x="736" y="224" width="16" height="16">
+   <properties>
+    <property name="destination" value="0005.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
