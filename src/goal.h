@@ -5,11 +5,11 @@
 
 #include "ew/updatable.h"
 #include "ew/renderable.h"
-#include "ew/rectblockcollidableblock.h"
+#include "ew/rectcollidable.h"
 #include "ew/state.h"
 #include "ew/rolemanager.h"
 
-class Goal : public ew::Updatable, public ew::Renderable, public ew::RectBlockCollidableBlock
+class Goal : public ew::Updatable, public ew::Renderable, public ew::RectCollidable
 {
 public:
   Goal(float x, float y, float w, float h, ew::State* state);
@@ -31,7 +31,7 @@ private:
   float h;
 
   ew::State* state;
-  ew::RoleManager<Goal, ew::Updatable, ew::Renderable, RectBlockCollidableBlock, RectCollidable> roles;
+  ew::RoleManager<Goal, ew::Updatable, ew::Renderable, ew::RectCollidable> roles;
 };
 
 #endif // GOAL_H

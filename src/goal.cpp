@@ -3,7 +3,7 @@
 #include "ew/engine.h"
 
 Goal::Goal(float x, float y, float w, float h, ew::State* state) :
-  ew::Updatable(), ew::Renderable(), RectBlockCollidableBlock(),
+  ew::Updatable(), ew::Renderable(), RectCollidable(),
   o(nullptr), x(x), y(y), w(w), h(h),
   state(state), roles(this, state)
 {
