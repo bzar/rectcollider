@@ -104,7 +104,6 @@ void Player::handleRectCollision(RectCollidable* other)
   }
   else if(typeid(*other) == typeid(Exit))
   {
-    std::cout << "Exit" << std::endl;
     Exit* exit = static_cast<Exit*>(other);
     state->loadLevel(exit->getDestination(), exit->getId());
   }

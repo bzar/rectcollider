@@ -11,6 +11,7 @@
 #include "enemy.h"
 #include <vector>
 #include <string>
+#include <functional>
 
 class GameState : public ew::State
 {
@@ -39,6 +40,7 @@ private:
   std::vector<Tile*> tiles;
   std::vector<Block*> blocks;
   std::vector<Enemy*> enemies;
+  std::vector<std::function<void()>> onGamePhaseFuncs;
 };
 
 #endif // GAMESTATE_H

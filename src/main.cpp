@@ -14,6 +14,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include <boost/filesystem.hpp>
+
 void windowCloseCallback(GLFWwindow* window);
 void gameloop(GLFWwindow* window);
 
@@ -91,11 +93,30 @@ void gameloop(GLFWwindow* window)
   GlhckGLFWInterceptor glhckGLFWInterceptor;
   engine.addInterceptor(&glhckGLFWInterceptor);
 
-  //std::vector<std::string> levels = {"levels/test3.tmx"};
-  GameState gameState("levels", "0001.tmx");
+
+
+  boost::filesystem::path levelPath("levels");
+  std::vector<std::string> levels;
+
+  for(boost::filesystem::directory_iterator i(levelPath); i != boost::filesystem::directory_iterator(); ++i)
+  {
+    if(!boost::filesystem::is_directory(i->status()))
+    {
+      boost::filesystem::path file = i->path().leaf();
+      if(file.has_extension() && file.extension() == ".tmx")
+      {
+        levels.push_back(file.generic_string());
+      }
+    }
+  }
+
+  std::sort(levels.begin(), levels.end());
+
+  std::string level = levels.front();
+  GameState gameState("levels", level);
   MenuState menuState({
-                        new MenuAction("Start", [](MenuState* s) { s->engine->setState(1);}),
-//                        new MenuSelect("Level", levels, [&gameState](std::string const& level) {gameState.setLevel(level);}),
+                        new MenuAction("Start", [&gameState, &level](MenuState* s) { std::cout << level << std::endl;gameState.loadLevel(level); s->engine->setState(1);}),
+                        new MenuSelect("Level", levels, [&level](std::string const& l) {level = l;}),
                         new Submenu("Title 1", {
                                       new Submenu("Title 1-1"),
                                       new Submenu("Title 1-2"),
