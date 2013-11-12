@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztlEEKwCAMBKP0/28uPQgiaSkh6q7sQG5CdtSkmFk5pNiRBxbywOI0D/bdxZy9Rx5YeB6Ms8KW9w15YPHHg8E1K+Nu1939s4h4IO7lWXlWu6LdaxR5xPp4vTL+oN4DC3ms4Wt2LuccG6Mfq8dI86jk9TjcS/wA7Q==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="50" height="30">
+  <object type="Entrance" x="32" y="96" width="16" height="16"/>
+  <object type="Exit" x="736" y="416" width="16" height="16">
+   <properties>
+    <property name="destination" value="0012.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Block" width="50" height="30">
+  <properties>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="800" height="16"/>
+  <object x="64" y="176" width="48" height="16"/>
+  <object x="0" y="16" width="16" height="464"/>
+  <object x="784" y="16" width="16" height="464"/>
+  <object x="16" y="464" width="768" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="16" y="112" width="48" height="16"/>
+  <object x="192" y="288" width="48" height="16"/>
+  <object x="336" y="304" width="48" height="16"/>
+  <object x="400" y="352" width="48" height="16"/>
+  <object x="512" y="352" width="48" height="16"/>
+  <object x="720" y="432" width="48" height="16"/>
+  <object x="624" y="416" width="48" height="16"/>
+  <object x="128" y="240" width="32" height="16"/>
+  <object x="272" y="256" width="32" height="16"/>
+ </objectgroup>
+</map>

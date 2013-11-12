@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztlUEKACAIBC36/5u7ekhQKzKYYChw25hTTURagH4oZ829/bvggQceeLz08C79zk7Omnv7V3145HN42H145HMVPPSezVlzb/+qL3qn4vrZY6jzjf8eAAAAAKASExwTBLU=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="50" height="30">
+  <object type="Entrance" x="48" y="240" width="16" height="16"/>
+  <object type="Exit" x="736" y="240" width="16" height="16">
+   <properties>
+    <property name="destination" value="0017.tmx"/>
+   </properties>
+  </object>
+  <object x="592" y="0" width="208" height="112"/>
+  <object x="208" y="0" width="144" height="112"/>
+  <object x="368" y="0" width="112" height="112"/>
+  <object x="496" y="0" width="80" height="112"/>
+  <object x="176" y="112" width="16" height="112"/>
+  <object x="208" y="112" width="16" height="112"/>
+  <object x="336" y="112" width="16" height="112"/>
+  <object x="368" y="112" width="16" height="112"/>
+  <object x="464" y="112" width="16" height="112"/>
+  <object x="496" y="112" width="16" height="112"/>
+  <object x="560" y="112" width="16" height="112"/>
+  <object x="592" y="112" width="16" height="112"/>
+ </objectgroup>
+ <objectgroup name="Object Layer 3" width="50" height="30">
+  <object name="moving1" type="Block" x="192" y="0" width="16" height="208">
+   <properties>
+    <property name="lethal" value="1"/>
+    <property name="path" value="path1"/>
+   </properties>
+  </object>
+  <object gid="2" x="192" y="208">
+   <properties>
+    <property name="parent" value="moving1"/>
+   </properties>
+  </object>
+  <object gid="2" x="192" y="192">
+   <properties>
+    <property name="parent" value="moving1"/>
+   </properties>
+  </object>
+  <object gid="2" x="192" y="176">
+   <properties>
+    <property name="parent" value="moving1"/>
+   </properties>
+  </object>
+  <object gid="2" x="192" y="160">
+   <properties>
+    <property name="parent" value="moving1"/>
+   </properties>
+  </object>
+  <object name="path1" x="208" y="208">
+   <properties>
+    <property name="duration" value="10"/>
+   </properties>
+   <polyline points="0,0 0,48"/>
+  </object>
+  <object name="moving2" type="Block" x="352" y="0" width="16" height="208">
+   <properties>
+    <property name="lethal" value="1"/>
+    <property name="path" value="path2"/>
+   </properties>
+  </object>
+  <object name="path2" x="368" y="208">
+   <properties>
+    <property name="duration" value="5"/>
+   </properties>
+   <polyline points="0,0 0,48"/>
+  </object>
+  <object gid="2" x="352" y="208">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object gid="2" x="352" y="192">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object gid="2" x="352" y="176">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object gid="2" x="352" y="160">
+   <properties>
+    <property name="parent" value="moving2"/>
+   </properties>
+  </object>
+  <object name="path3" x="496" y="208">
+   <properties>
+    <property name="duration" value="2"/>
+   </properties>
+   <polyline points="0,0 0,48"/>
+  </object>
+  <object name="moving3" type="Block" x="480" y="0" width="16" height="208">
+   <properties>
+    <property name="lethal" value="1"/>
+    <property name="path" value="path3"/>
+   </properties>
+  </object>
+  <object gid="2" x="480" y="208">
+   <properties>
+    <property name="parent" value="moving3"/>
+   </properties>
+  </object>
+  <object gid="2" x="480" y="192">
+   <properties>
+    <property name="parent" value="moving3"/>
+   </properties>
+  </object>
+  <object gid="2" x="480" y="176">
+   <properties>
+    <property name="parent" value="moving3"/>
+   </properties>
+  </object>
+  <object gid="2" x="480" y="160">
+   <properties>
+    <property name="parent" value="moving3"/>
+   </properties>
+  </object>
+  <object name="path4" x="592" y="208">
+   <properties>
+    <property name="duration" value="1"/>
+   </properties>
+   <polyline points="0,0 0,48"/>
+  </object>
+  <object name="moving4" type="Block" x="576" y="0" width="16" height="208">
+   <properties>
+    <property name="lethal" value="1"/>
+    <property name="path" value="path4"/>
+   </properties>
+  </object>
+  <object gid="2" x="576" y="208">
+   <properties>
+    <property name="parent" value="moving4"/>
+   </properties>
+  </object>
+  <object gid="2" x="576" y="192">
+   <properties>
+    <property name="parent" value="moving4"/>
+   </properties>
+  </object>
+  <object gid="2" x="576" y="176">
+   <properties>
+    <property name="parent" value="moving4"/>
+   </properties>
+  </object>
+  <object gid="2" x="576" y="160">
+   <properties>
+    <property name="parent" value="moving4"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Block" width="50" height="30">
+  <properties>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="192" height="112"/>
+  <object x="0" y="112" width="16" height="144"/>
+  <object x="784" y="112" width="16" height="144"/>
+  <object x="0" y="256" width="800" height="224"/>
+ </objectgroup>
+</map>

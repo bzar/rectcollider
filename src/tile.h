@@ -9,7 +9,7 @@
 class Tile : public ew::Renderable
 {
 public:
-  Tile(float x, float y, float w, float h, glhckTexture* texture, glhckRect const& textureTransform, ew::State* state);
+  Tile(float x, float y, float w, float h, int z, glhckTexture* texture, glhckRect const& textureTransform, ew::State* state);
   ~Tile();
   void render() override;
 

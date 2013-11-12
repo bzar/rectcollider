@@ -150,3 +150,9 @@ void Player::setVictorious(bool value)
   victorious = value;
 }
 
+void Player::setZ(int value)
+{
+  auto p = glhckObjectGetPosition(o);
+  glhckObjectPositionf(o, p->x, p->y, value);
+}
+

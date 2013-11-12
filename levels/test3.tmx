@@ -10,7 +10,12 @@
  </tileset>
  <layer name="Base tile layer" width="50" height="30">
   <data encoding="base64" compression="zlib">
-   eJztzwENADAIwDDwb/o2dtImE7CdmT3S73y0+Gjx0eKjxUeLjxYfLT5afLT4aPHR4qPFR8+ljws9OtEAmw==
+   eJztlNEKwCAIRWv4/9+8lw2GaLU9jJPcA1JJgQer3lrrRWJ35MFCHizkwUIeLOTBQh4s5MFCHizk8R1zc3vk/HqVvz18jb5eS/IziP3we1YgeIzG6Gx07wgeb95Hlqf9V8cVGaR+jJh53OzuUa0fEZU8KsQJLNUBUw==
+  </data>
+ </layer>
+ <layer name="Tile Layer 3" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzwEJAAAIwDCxf2gRDKG4wQM8AgAAAABoOV3nYxcffxRNWAAV
   </data>
  </layer>
  <objectgroup name="Moving platforms" width="50" height="30"/>
@@ -48,4 +53,9 @@
    </properties>
   </object>
  </objectgroup>
+ <layer name="Tile Layer 2" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzzENAAAIwDCCf9E8nAgA0iYTsAgAAAAAYJLddT528fFXAUwYABU=
+  </data>
+ </layer>
 </map>

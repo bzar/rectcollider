@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt1tEKABAMheFN3v+Z3SgSa3Kz5T/1lbToXKEiogAAfCx76BEr9IgVesQKPWIlc486rW/f+9MfwJrdzXnPW/P6byndbu+0b815zyvGPQAAYGhv8wQB
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="50" height="30">
+  <object type="Entrance" x="32" y="160" width="16" height="16"/>
+  <object type="Exit" x="48" y="-160" width="16" height="16">
+   <properties>
+    <property name="destination" value="0011.tmx"/>
+   </properties>
+  </object>
+  <object type="Exit" x="736" y="288" width="16" height="16">
+   <properties>
+    <property name="destination" value="0011.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Block" width="50" height="30">
+  <properties>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="800" height="144"/>
+  <object x="0" y="336" width="800" height="144"/>
+  <object x="0" y="144" width="16" height="160"/>
+  <object x="784" y="144" width="16" height="160"/>
+  <object x="144" y="320" width="32" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="320" y="320" width="32" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="464" y="320" width="32" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="224" y="320" width="48" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="384" y="320" width="48" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="544" y="320" width="48" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="624" y="320" width="64" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="0" y="304" width="144" height="32"/>
+  <object x="176" y="304" width="48" height="32"/>
+  <object x="272" y="304" width="48" height="32"/>
+  <object x="352" y="304" width="32" height="32"/>
+  <object x="432" y="304" width="32" height="32"/>
+  <object x="496" y="304" width="48" height="32"/>
+  <object x="592" y="304" width="32" height="32"/>
+  <object x="688" y="304" width="112" height="32"/>
+ </objectgroup>
+</map>

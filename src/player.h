@@ -32,6 +32,7 @@ public:
   bool getVictorious() const;
   void setVictorious(bool value);
 
+  void setZ(int value);
 private:
   glhckObject* o;
   float x;

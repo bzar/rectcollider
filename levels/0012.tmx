@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="tiles.png" width="320" height="240"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="50" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztl9EKwCAIRXPs/7957DVkmvNalkKwh7jXQ2qNWmu0ycoexbFWnMKRhdM7T252RMwT6+yy7EdGVN0Uh15/Vw5EX9Z56PWLY8wHrS95eLCuwOGhk4VD44PWp+5bW2cjuWU9j541Kwfng9b3+P+Qam02h6ePlMOfPJAcGfrjlHnF+aD1Pd4lqD7/0r2Zfdp8rIHQ4+5wdETV1QVeaI9X/wE5ggEe
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="50" height="30">
+  <object type="Entrance" x="64" y="416" width="16" height="16"/>
+  <object type="Exit" x="736" y="416" width="16" height="16">
+   <properties>
+    <property name="destination" value="0013.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Block" width="50" height="30">
+  <properties>
+   <property name="type" value="Block"/>
+  </properties>
+  <object x="0" y="0" width="800" height="16"/>
+  <object x="64" y="176" width="48" height="16"/>
+  <object x="0" y="16" width="16" height="464"/>
+  <object x="784" y="16" width="16" height="464"/>
+  <object x="16" y="464" width="384" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+  <object x="16" y="112" width="48" height="16"/>
+  <object x="192" y="288" width="48" height="16"/>
+  <object x="336" y="304" width="48" height="16"/>
+  <object x="32" y="288" width="48" height="16"/>
+  <object x="512" y="352" width="48" height="16"/>
+  <object x="720" y="432" width="48" height="16"/>
+  <object x="624" y="416" width="48" height="16"/>
+  <object x="128" y="240" width="32" height="16"/>
+  <object x="272" y="256" width="32" height="16"/>
+  <object x="112" y="336" width="32" height="16"/>
+  <object x="208" y="384" width="32" height="16"/>
+  <object x="128" y="416" width="32" height="16"/>
+  <object x="352" y="368" width="32" height="16"/>
+  <object x="112" y="80" width="32" height="16"/>
+  <object x="208" y="112" width="48" height="16"/>
+  <object x="304" y="96" width="48" height="16"/>
+  <object x="272" y="336" width="48" height="16"/>
+  <object x="272" y="416" width="48" height="16"/>
+  <object x="48" y="432" width="48" height="16"/>
+  <object x="384" y="96" width="48" height="16"/>
+  <object x="400" y="112" width="16" height="368"/>
+  <object x="416" y="464" width="368" height="16">
+   <properties>
+    <property name="lethal" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

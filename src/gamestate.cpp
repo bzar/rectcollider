@@ -137,7 +137,7 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
             int y = tileHeight * ty;
 
             Tileset& tileset = tilesets.at(mapTile.tilesetId);
-            Tile* tile = new Tile(x, y, tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(mapTile.id), this);
+            Tile* tile = new Tile(x, y, tileWidth, tileHeight, layer->GetZOrder(), tileset.getTexture(), tileset.getRect(mapTile.id), this);
             tiles.push_back(tile);
           }
         }
@@ -150,7 +150,6 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
     for(Tmx::ObjectGroup* objectGroup : map.GetObjectGroups())
     {
       std::string const layerType = objectGroup->GetProperties().HasProperty("type") ? objectGroup->GetProperties().GetLiteralProperty("type") : "";
-      bool layerLethal = objectGroup->GetProperties().HasProperty("block") && objectGroup->GetProperties().GetNumericProperty("lethal") == 1;
 
       for(Tmx::Object* object : objectGroup->GetObjects())
       {
@@ -167,6 +166,7 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
             startX = x;
             startY = y;
             player->respawn(startX, startY);
+            player->setZ(objectGroup->GetZOrder());
           }
         }
         else if(type == "Exit")
@@ -202,7 +202,7 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
               auto getPoint = [polygon, polyline](int i) { return polygon ? polygon->GetPoint(i) : polyline->GetPoint(i); };
               int numPoints = polygon ? polygon->GetNumPoints() : polyline->GetNumPoints();
 
-              float duration = props.getFloat("duration", 5.0f);
+              float duration = path->GetProperties().HasProperty("duration") ? path->GetProperties().GetFloatProperty("duration") : 5.0f;
               float length = 0;
               for(int i = 1; i <= numPoints; ++i)
               {
@@ -233,7 +233,7 @@ void GameState::loadLevel(const std::string& filename, int entranceId)
           int tilesetIndex = map.FindTilesetIndex(object->GetGid());
           int tileId = object->GetGid() - map.GetTileset(tilesetIndex)->GetFirstGid();
           Tileset& tileset = tilesets.at(tilesetIndex);
-          Tile* tile = new Tile(x, y - map.GetTileHeight(), tileWidth, tileHeight, tileset.getTexture(), tileset.getRect(tileId), this);
+          Tile* tile = new Tile(x, y - map.GetTileHeight(), tileWidth, tileHeight, objectGroup->GetZOrder(), tileset.getTexture(), tileset.getRect(tileId), this);
           if(object->GetProperties().HasProperty("parent"))
           {
             tileParents.push_back(make_tuple(tile, object->GetProperties().GetLiteralProperty("parent")));
