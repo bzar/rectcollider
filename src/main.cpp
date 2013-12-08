@@ -27,7 +27,7 @@ class GlhckGLFWInterceptor : public ew::Interceptor<ew::Engine>
   void before(ew::Engine *t)
   {
     glfwPollEvents();
-    glhckRenderClear(GLHCK_DEPTH_BUFFER | GLHCK_COLOR_BUFFER);
+    glhckRenderClear(GLHCK_DEPTH_BUFFER_BIT | GLHCK_COLOR_BUFFER_BIT);
   }
 
   void after(ew::Engine *engine)

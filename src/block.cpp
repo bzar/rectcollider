@@ -12,6 +12,7 @@ Block::Block(float x, float y, float w, float h, ew::State *state) :
 
 Block::~Block()
 {
+  glhckObjectFree(o);
 }
 
 void Block::update(const float delta)
